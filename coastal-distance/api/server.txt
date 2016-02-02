@@ -1,0 +1,5 @@
+Tomcat:
+/opt/bitnami/apache-tomcat
+
+MySQL:
+cd:cd

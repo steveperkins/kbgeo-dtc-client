@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="KB GeoRisk Map Tools">
+    <meta name="author" content="Steve Perkins, KB GeoRisk">
+
+    <title>KB GeoRisk Map Tools</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/simple-sidebar.css" rel="stylesheet">
+	
+	<link href="css/kbgeo.css" rel="stylesheet">
+	
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <div id="wrapper" class="toggled">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="http://www.kbgeo.com">
+                       KB GeoRisk Map Tools
+                    </a>
+                </li>
+			</ul>
+			
+            <ul class="nav nav-tabs" role="tablist">
+			    <li role="presentation" class="active"><a id="latLngTabLink" href="#latlng" aria-controls="latlng" role="tab" data-toggle="tab">Lat/Lng</a></li>
+			    <li role="presentation"><a id="settingsTabLink" href="#settingsTab" aria-controls="settingsTab" role="tab" data-toggle="tab">Settings</a></li>
+			  </ul>
+			
+			  <!-- Tab panes -->
+			  <div class="tab-content">
+			    <div role="tabpanel" class="tab-pane active" id="latlng">
+			    	<div class="form">
+					  <div class="form-group">
+						<label for="bulkLatLng">Coordinates:</label>
+						<textarea rows="10" cols="4" class="form-control" id="bulkLatLng" placeholder="lat:lng:ordinal" onkeydown="return validateBulkLatLng(event);"></textarea>
+					  </div>
+					  <div style="margin-left: 10px">
+						<input type="checkbox" id="clearPointsBeforeDrawing" value=""> <label for="clearPointsBeforeDrawing">Clear first</label>
+					  </div>
+					  <button id="go" type="button" class="btn btn-primary center-block" onclick="bulkLatLngFormSubmit();return">Go!</button>
+				  </div>
+				</div>
+			    <div role="tabpanel" class="tab-pane" id="settingsTab">
+			    	<div class="form">
+			    	 <div class="form-group">
+						<label for="showLines">Show lines:</label>
+						<input type="checkbox" class="form-control" id="showLines" value="">
+					  </div>
+					   <div class="form-group">
+						<label for="showLines">Alternate lines:</label>
+						<input type="checkbox" class="form-control" id="alternateLines" value="">
+					  </div>
+					  <div class="form-group">
+						<label for="markerIcon">Marker icon:</label>
+						<input type="text" class="form-control" id="markerIcon" value="">
+					  </div>
+					  <div class="form-group">
+						<label for="markerLabelOffsetHorizontal">Label offset (H):</label>
+						<input type="text" class="form-control" id="markerLabelOffsetHorizontal" value="">
+					  </div>
+					  <div class="form-group">
+						<label for="markerLabelOffsetVertical">Label offset (V):</label>
+						<input type="text" class="form-control" id="markerLabelOffsetVertical" value="">
+					  </div>
+					  <div class="form-group">
+						<label for="markerLabelOpacity">Label opacity:</label>
+						<input type="text" class="form-control" id="markerLabelOpacity" value="">
+					  </div>
+					  <div class="form-group">
+						<label for="lineColor">Line color:</label>
+						<input type="text" class="form-control" id="lineColor" value="">
+					  </div>
+					  <div class="form-group">
+						<label for="lineOpacity">Line opacity:</label>
+						<input type="text" class="form-control" id="lineOpacity" value="">
+					  </div>
+					  <div class="form-group">
+						<label for="lineWeight">Line weight:</label>
+						<input type="text" class="form-control" id="lineWeight" value="">
+					  </div>
+					  <button id="address-go" type="button" class="btn btn-primary center-block" onclick="saveMapSettings();return">Save</button>
+				  </div>
+			    </div>
+			    <div style="text-align: center">
+			    	<span id="errorMessage"></span>
+			    </div>
+			  </div>
+            <div class="footer">
+            	KB GeoRisk map tools
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="pageContentWrapper">
+		<div id="mainMap" class="full-map"></div>
+		
+		<!-- Map tools -->
+		<span id="coordsDisplay"><span class="clicked-coord"></span> <span class="current-coord"></span></span>
+		<span id="savedClickedPoints">
+			<span style="display: inline-block;margin-top: 5px;margin-left: 5px;"><strong>Clicked Points</strong></span>
+			
+			<span class="btn-group accordion-tools-container" role="group" aria-label="Saved point tools">
+				<button id="plotSavedClickedPoints" type="button" class="btn btn-link btn-sm" aria-label="Plot">
+					<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+				</button>
+				<button id="clearSavedClickedPoints" type="button" class="btn btn-link btn-sm" aria-label="Clear" style="padding-left: 2px;">
+					<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+				</button>
+				<button type="button" class="btn btn-default btn-sm collapse-toggle" aria-label="Collapse" data-toggle="collapse" data-target="#savedClickedPointsContainer" aria-expanded="true" aria-controls="collapseExample">
+				  <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
+				</button>
+			</span>
+			<div id="savedClickedPointsContainer" aria-expanded="true" class="collapse in">
+				<textarea rows="3" cols="3" class="form-control" id="bulkLatLng" placeholder="Records points you click" onkeydown="return validateBulkLatLng(event);"></textarea>
+			</div>
+		</span>
+		
+        </div>
+        <!-- /#pageContentWrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCByV51ctBx5oDi6cbXTnfN7eBR2rUMGpE"></script>
+    <script src="js/markerwithlabel.js"></script>
+	
+	<script src="js/validator.js"></script>
+	<script src="js/maps.js"></script>
+	<script src="js/map-settings.js"></script>
+	
+    <!-- Menu Toggle Script -->
+    <script>
+	var ROOT = "https://api.kbgeo.com";
+	//var ROOT = "http://localhost:8080/api";
+	var map;
+	var originPoint;
+	var coastalPoint;
+	var mapSettings = new MapSettings().loadPersistedSettings();
+	var mapTools = new KbMapTools();
+	var markerManager = null;
+	
+	$(window).on('resize orientationChange', function(event) {
+		resetMapSize();
+	});
+	
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    
+    $("#clearPointsBeforeDrawing").click(function(e) {
+    	mapSettings.setClearPointsBeforeDrawing($("#clearPointsBeforeDrawing").is(":checked"))
+    });
+    
+    $("#plotSavedClickedPoints").click(function(e) {
+    	setPlotCoordsText(getSavedClickedCoords());
+    	bulkLatLngFormSubmit();
+    });
+    
+    $("#clearSavedClickedPoints").click(function(e) {
+    	clearSavedClickedCoords();
+    });
+    
+    
+    $("#settingsTabLink").click(function(e) {
+       // Populate tab with settings from memory
+       $("#showLines").attr("checked", mapSettings.getShowLines());
+       $("#alternateLines").attr("checked", mapSettings.getAlternateLines());
+       $("#markerIcon").val(mapSettings.getMarkerIcon());
+       $("#markerLabelOffsetHorizontal").val(mapSettings.getMarkerLabelOffsetHorizontal());
+       $("#markerLabelOffsetVertical").val(mapSettings.getMarkerLabelOffsetVertical());
+       $("#markerLabelOpacity").val(mapSettings.getMarkerLabelOpacity());
+       $("#lineColor").val(mapSettings.getLineColor());
+       $("#lineOpacity").val(mapSettings.getLineOpacity());
+       $("#lineWeight").val(mapSettings.getLineWeight());
+    });
+    
+    function saveMapSettings() {
+    	mapSettings.setShowLines($("#showLines").is(":checked"));
+    	mapSettings.setAlternateLines($("#alternateLines").is(":checked"));
+    	mapSettings.setMarkerIcon($("#markerIcon").val());
+        mapSettings.setMarkerLabelOffsetHorizontal(parseInt($("#markerLabelOffsetHorizontal").val()));
+        mapSettings.setMarkerLabelOffsetVertical(parseInt($("#markerLabelOffsetVertical").val()));
+        mapSettings.setMarkerLabelOpacity(parseFloat($("#markerLabelOpacity").val()));
+        mapSettings.setLineColor($("#lineColor").val());
+        mapSettings.setLineOpacity(parseFloat($("#lineOpacity").val()));
+        mapSettings.setLineWeight(parseInt($("#lineWeight").val()));
+        
+        mapSettings.persist();
+        // Send user back to input tab
+        $("#latLngTabLink").click();
+    }
+    
+	function googleMapLibraryLoaded() {
+		setTimeout(function() {$("#wrapper").toggleClass("toggled");}, 1);
+		resetMapSize();
+		map = mapTools.initMap('mainMap', null, mapSettings);
+		markerManager = new MarkerManager(map);
+		// Display cursor lat/lng on click
+		google.maps.event.addListener(map, 'click', function(event) {
+			var coord = { lat: event.latLng.lat(), lng: event.latLng.lng()};
+			displayClickedCoord(coord);
+			saveClickedCoord(coord)
+		});
+		// Display cursor lat/lng on mouse move
+		google.maps.event.addListener(map, 'mousemove', function(event) {
+			displayCurrentCoord({ lat: event.latLng.lat(), lng: event.latLng.lng()});
+		});
+	}
+	
+	function resetMapSize() {
+		$(".full-map").height(document.documentElement.clientHeight);
+		$(".footer").toggleClass("footer").toggleClass("footer");
+	}
+	
+	// Expects a LatLng object/anything with .lat and .lng attributes
+	function displayCurrentCoord(coord) {
+		$("#coordsDisplay .current-coord").html(coord.lat + "," + coord.lng);
+	}
+	
+	// Expects a LatLng object/anything with .lat and .lng attributes
+	function displayClickedCoord(coord) {
+		$("#coordsDisplay .clicked-coord").html(coord.lat + "," + coord.lng);
+	}
+	
+	function saveClickedCoord(coord) {
+		var txtArea = $("#savedClickedPoints textarea");
+		txtArea.val(txtArea.val() + coord.lat + "," + coord.lng + "\n").scrollTop(txtArea[0].scrollHeight - txtArea.height());
+	}
+	
+	function getSavedClickedCoords() {
+		return $("#savedClickedPoints textarea").val();
+	}
+	
+	function clearSavedClickedCoords() {
+		$("#savedClickedPoints textarea").val('');
+	}
+	
+	function setPlotCoordsText(coordsText) {
+		$("#bulkLatLng").val(coordsText);
+	}
+	
+	// Validates input and returns a list of lat/lng/ordinal objects
+	var BATCH_DRAW_BREAK = 20;
+	var ZOOM_HIGHEST_BREAK = 50;
+	var ZOOM_MIDDLE_BREAK = 20;
+	var ZOOM_LOWEST_BREAK = 1;
+	function bulkLatLngFormValidateAndParse() {
+		var latLngs = [];
+		
+		var hasError = false;
+		var inputField = $("#bulkLatLng");
+		var rawInput = inputField.val();
+		var inputRows = rawInput.split("\n");
+		
+		var x;
+		for(x = 0; x < inputRows.length; x++) {
+			var latLng = parseBulkLatLngRow(inputRows[x]);
+			if(latLng == null || !latLng) {
+				// Handle error case
+				console.log("Could not parse row " + x);
+				break;
+			}
+			if(!validateLat(latLng.lat)) {
+				console.log("Invalid lat at row " + x);
+				break;
+			}
+			if(!validateLng(latLng.lng)) {
+				console.log("Invalid lng at row " + x);
+				break;
+			}
+			latLngs.push(latLng);
+			if(x == 0) {
+				map.setCenter(latLng);
+			}
+			if(x % BATCH_DRAW_BREAK == 0) {
+				drawPoints(latLngs);
+				latLngs = [];
+			}
+		}
+		if(latLngs.length > 0) {
+			drawPoints(latLngs);
+		}
+		return latLngs;
+	}
+	
+	var separators = [',', ';', ' '];
+	function parseBulkLatLngRow(row) {
+		// Split on any known separators
+		var tokens = row.split(/[;,| \t[, ]]/);
+		var obj = {};
+		obj.lat = parseFloat(tokens[0]);
+		obj.lng = parseFloat(tokens[1]);
+		if(tokens.length > 2) obj.ord = tokens[2];
+		
+		return obj;
+	}
+	
+	function bulkLatLngFormSubmit() {
+		if(mapSettings.getClearPointsBeforeDrawing()) mapTools.clearMap();
+		var latLngs = bulkLatLngFormValidateAndParse();
+		/*
+		var x;
+		var previousPoint;
+		for(x=0; x < latLngs.length; x++) {
+			var newPoint = mapTools.createPointMarker(latLngs[x]);
+			if(previousPoint) {
+				if(mapSettings.getShowLines() == true) {
+					var drawLine = mapSettings.getAlternateLines() ? x % 2 == 0 : true;
+					mapTools.drawLineBetween(previousPoint, newPoint);
+				}
+			}
+			previousPoint = newPoint;
+		}
+		map.setCenter(latLngs[0]);
+		*/
+	}
+	
+	var previousPoint;
+	/**
+	 * Expects an array of objects with lat, lng, and ord attributes
+	 */
+	function drawPoints(latLngs) {
+		var x;
+		for(x=0; x < latLngs.length; x++) {
+			var newPoint = mapTools.createPointMarker(latLngs[x]);
+			if(previousPoint) {
+				if(mapSettings.getShowLines() == true) {
+					var drawLine = mapSettings.getAlternateLines() ? x % 2 == 0 : true;
+					mapTools.drawLineBetween(previousPoint, newPoint);
+				}
+			}
+			previousPoint = newPoint;
+		}
+	}
+	
+	function validateBulkLatLng(e) {
+		e = e||window.event; // IE support
+		var c = (e.keyCode ? e.keyCode : e.which);
+		var ctrlDown = e.ctrlKey||e.metaKey; // Mac support
+
+		if(ctrlDown) return true;
+		
+		// Prevent upper-case characters (symbols on number keys)
+		if(e.keyIdentifier && e.keyIdentifier === "Shift") return false;
+		// Check for Alt+Gr (http://en.wikipedia.org/wiki/AltGr_key)
+		if (ctrlDown && (e.keyIdentifier && e.keyIdentifier === "Shift" || e.altKey)) return true;
+		
+		// Check for ctrl+c, v and x
+		if (ctrlDown && c==67) return true; // c
+		if (ctrlDown && c==86) return true; // v
+		if (ctrlDown && c==88) return true; // x
+		if (ctrlDown && c==91) return true; // y
+		if (ctrlDown && c==90) return true; // z
+		if (c>=33 && c<=46) return true; // pgup, pgdn, end, home, arrows, ins and del
+		if (c>=186 && c<=191 || c==222) return true; // semi-colon, equals, comma, dash, period, forward slash, single quote
+		
+		var code = String.fromCharCode((96 <= c && c <= 105)? c-48 : c);
+		
+    	if(validateCoordinateCharacter(code)) {
+    		return true;
+    	}
+    	return false;
+    }
+	
+	function showError(msg) {
+		var errorElement = $("#errorMessage");
+		errorElement.html(msg);
+		errorElement.show();
+	}
+	
+	function clearError(msg) {
+		var errorElement = $("#errorMessage");
+		errorElement.hide();
+		errorElement.html("");
+	}
+	
+	$( document ).ready(function() {
+		googleMapLibraryLoaded();
+		
+		$("#clearPointsBeforeDrawing").attr("checked", mapSettings.getClearPointsBeforeDrawing());
+	});
+    </script>
+
+</body>
+
+</html>

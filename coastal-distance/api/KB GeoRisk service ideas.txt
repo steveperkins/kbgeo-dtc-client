@@ -1,0 +1,14 @@
+KB GeoRisk service improvements
+x Add INSERT, HOME, END, and arrow keys to onKeyDown validation exclusions on demo page
+x Add ability to search by address (auto-geocoding)
+- Add ability to send batch requests
+
+KB GeoRisk service ideas
+
+- Zip codes by city
+- Zip codes by county
+- Zip codes by state
+- Political candidate contribution data (http://www.fec.gov/finance/disclosure/ftpsum.shtml)
+	- Political contributor data
+- School data (http://www.ed.gov/developers)
+- Zip code database, e.g. distance between zip code centers (http://www.boutell.com/zipcodes/)

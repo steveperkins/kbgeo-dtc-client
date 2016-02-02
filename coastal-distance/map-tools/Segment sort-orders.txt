@@ -1,0 +1,21 @@
+2 NH start = 1780
+3 Massachussetts start: 1814
+4 Rhode Island start: 2765
+5 Connecticut start: 3027
+6 New York start: 3425
+7 New Jersey start: 3508
+8 Delaware start: 4481
+9 Maryland start: 4699
+10 Virginia start: 7916
+11 North Carolina start: 8977
+12 South Carolina start: 11375
+13 Georgia start: 11959
+14 Florida start: 12637
+15 Alabama start: 17611
+16 Mississippi start: 17969
+17 Louisiana start: 18176
+18 Texas start: 20991
+   Texas end: 23243
+19 California start: 56924
+20 Oregon start: 71403
+21 Washington start: 75987 

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+       http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+ 
+    <!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+ 	<util:properties id="propertyConfigurer" location="classpath:application.properties"/>
+	<context:property-placeholder properties-ref="propertyConfigurer" />
+
+	<mvc:annotation-driven />
+    <task:annotation-driven />
+    
+    <bean id="contentNegotiationManager"
+             class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+	    <property name="favorPathExtension" value="false" />
+	    <!-- <property name="favorParameter" value="true" /> -->
+	    <!-- <property name="parameterName" value="mediaType" /> -->
+	    <!-- <property name="ignoreAcceptHeader" value="true"/> -->
+	    <property name="useJaf" value="false"/>
+	    <property name="defaultContentType" value="application/json" />
+	 
+	    <property name="mediaTypes">
+	        <map>
+	            <entry key="json" value="application/json" />
+	            <entry key="xml" value="application/xml" />
+	       </map>
+	    </property>
+	</bean>
+	
+    <!-- Scans within the base package of the application for @Components to configure as beans -->
+    <context:component-scan base-package="com.kbs.geo" />
+    
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${db.driver}" />
+        <property name="url" value="${db.url}" />
+        <property name="username" value="${db.user}" />
+        <property name="password" value="${db.password}" />
+    </bean>
+    
+    <!-- Security filters referenced by web.xml -->
+    <!-- <bean id="ApiClientSecurityFilter" class="com.kbs.geo.coastal.http.interceptor.KbsApiClientSecurityFilter"/>
+    <bean id="ApiWebClientAuthFilter" class="com.kbs.geo.coastal.http.interceptor.KbsApiWebClientAuthFilter"/>
+    <bean id="ApiWebClientFilter" class="com.kbs.geo.coastal.http.interceptor.KbsApiWebClientSecurityFilter"/> -->
+    <bean id="RoutingFilter" class="com.kbs.geo.coastal.http.interceptor.KbsRoutingFilter"/>
+    
+    <bean id="clientAuthWeb" class="com.kbs.geo.coastal.model.billing.ClientAuthWeb"/>
+     
+    <!-- application.properties properties are pulled in here so they can be injected with @Resource -->
+    <bean id="apiGoogleMapsKey" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${api.maps.google.key}"/>
+    </bean>
+    
+    <bean id="http.cors.access.control.allow.credentials" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${http.cors.access.control.allow.credentials}"/>
+    </bean>
+    <bean id="http.cors.access.control.allow.origin" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${http.cors.access.control.allow.origin}"/>
+    </bean>
+    <bean id="http.cors.access.control.allow.headers" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${http.cors.access.control.allow.headers}"/>
+    </bean>
+    <bean id="jwt.secret" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${jwt.secret}"/>
+    </bean>
+    <bean id="jwt.ttl.ms" class="java.lang.Integer">
+    	<constructor-arg value="${jwt.ttl.ms}"/>
+    </bean>
+    <bean id="jwt.issuer" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${jwt.issuer}"/>
+    </bean>
+</beans>

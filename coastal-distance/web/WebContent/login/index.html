@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KB GeoRisk provides fast, accurate, inexpensive distance-to-coast calculation to insurance risk and other industries as an easily-integrated web service">
+    <meta name="author" content="Steve Perkins, KB GeoRisk">
+    <title>KB GeoRisk</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="img/ico/favicon.ico">
+    
+    <style>
+    	body {
+    		background: url(img/ocean.jpg),
+    					url(img/background-sand.png);
+    					
+    		background-repeat: no-repeat,
+    							repeat-y;
+    	}
+    	
+    	.big-gap {
+    		margin-top: 10%;
+    	}
+    	
+    	section {
+    		margin-left: 20%;
+    		margin-right: 20%
+    	}
+    </style>
+</head><!--/head-->
+
+<body>
+	<div class="big-gap"></div>
+	<section id="login">
+		<form class="form-horizontal">
+			<div class="form-group">
+				<label for="username" class="col-sm-offset-2 col-sm-2 col-md-offset-2 col-md-2 control-label">Username</label>
+				<div class="col-sm-6 col-md-6">
+					<input id="username" type="text" placeholder="Username" class="form-control">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="password" class="col-sm-offset-2 col-sm-2  col-md-offset-2 col-md-2 control-label">Password</label>
+				<div class="col-sm-6 col-md-6">
+					<input id="password" type="text" placeholder="Password" class="form-control">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-4 col-sm-6">
+					<button id="submit" type="button" class="btn btn-danger" style="width: 100%">Go</button>
+				</div>	
+			</div>		
+		</form>
+    </section><!--/#login -->
+
+    <footer id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                </div>
+            </div>
+        </div>
+    </footer><!--/#footer-->
+
+    <script src="../js/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    	var ROOT = "http://localhost:8080/api";
+    	// var ROOT = "https://api.kbgeo.com";
+    	$("#submit").click(function() {
+    		$.ajax({
+    			type: 'GET',
+    			url: ROOT + "/console/auth",
+    			headers: {
+    				"kb-user-name": $("#username").val(),
+    				"kb-user-password": window.btoa($("#password").val())
+    			},
+    			contentType: 'text/plain'
+    		}).error(function(jqXHR, textStatus, errorThrown) {
+    			console.error("Could not authenticate: " + errorThrown);
+    			if(jqXHR.responseJSON && jqXHR.responseJSON.error) {
+    				console.error(jqXHR.responseJSON.error);
+    				//showError(jqXHR.responseJSON.error);
+    				return;
+    			}
+    		}).success(function(data) {
+    			console.log("Success: " + data);
+    			localStorage.setItem("kb-userData", JSON.stringify(data));
+    			window.location = "../console";
+    		});
+    	});
+    </script>
+</body>
+</html>
