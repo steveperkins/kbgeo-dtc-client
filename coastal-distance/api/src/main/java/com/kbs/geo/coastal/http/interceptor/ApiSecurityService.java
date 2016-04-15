@@ -97,7 +97,7 @@ public class ApiSecurityService {
 		LOG.info("Client contracts found with this token");
 		
 		// Check for source IP filters
-		String sourceIp = httpServletRequest.getLocalAddr();
+		String sourceIp = httpServletRequest.getRemoteAddr();
 		List<ClientAuthIp> authIps = clientAuthIpService.getByClientAuthId(clientAuth.getId());
 		if(null != authIps && !authIps.isEmpty()) {
 			// If the originating IP doesn't match any of the authorized IPs, prevent access

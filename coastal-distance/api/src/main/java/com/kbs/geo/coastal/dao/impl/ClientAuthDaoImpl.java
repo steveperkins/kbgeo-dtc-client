@@ -27,6 +27,9 @@ public class ClientAuthDaoImpl extends AbstractDao<ClientAuth> implements Client
 	@Autowired
 	private DataSource datasource;
 	
+	@Autowired
+	private ClientAuthRowMapper rowMapper;
+	
 	public ClientAuthDaoImpl() {
 		super.INSERT_SQL = INSERT_SQL;
 		super.UPDATE_SQL = UPDATE_SQL;
@@ -35,7 +38,7 @@ public class ClientAuthDaoImpl extends AbstractDao<ClientAuth> implements Client
 	@Override
 	public ClientAuth get(Integer id) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
-		List<ClientAuth> clientAuth = jdbcTemplate.query(SELECT_BY_ID_SQL, new Object[]{ id }, new ClientAuthRowMapper());
+		List<ClientAuth> clientAuth = jdbcTemplate.query(SELECT_BY_ID_SQL, new Integer[]{ id }, rowMapper);
 		if(null != clientAuth && !clientAuth.isEmpty()) return clientAuth.get(0);
 		return null;
 	}
@@ -43,14 +46,14 @@ public class ClientAuthDaoImpl extends AbstractDao<ClientAuth> implements Client
 	@Override
 	public List<ClientAuth> getByClientId(Integer clientId) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
-		List<ClientAuth> clientAuth = jdbcTemplate.query(SELECT_BY_CLIENT_ID_SQL, new Object[]{ clientId }, new ClientAuthRowMapper());
+		List<ClientAuth> clientAuth = jdbcTemplate.query(SELECT_BY_CLIENT_ID_SQL, new Integer[]{ clientId }, rowMapper);
 		return (null == clientAuth ? new ArrayList<ClientAuth>() : clientAuth);
 	}
 	
 	@Override
 	public ClientAuth getByToken(String token) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
-		List<ClientAuth> clientAuth = jdbcTemplate.query(SELECT_BY_TOKEN_SQL, new Object[]{ token }, new ClientAuthRowMapper());
+		List<ClientAuth> clientAuth = jdbcTemplate.query(SELECT_BY_TOKEN_SQL, new String[]{ token }, rowMapper);
 		if(null != clientAuth && !clientAuth.isEmpty()) {
 			return clientAuth.get(0);
 		}

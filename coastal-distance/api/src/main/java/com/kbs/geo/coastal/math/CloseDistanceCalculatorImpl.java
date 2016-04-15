@@ -82,7 +82,12 @@ public class CloseDistanceCalculatorImpl implements DistanceCalculator {
 		 * First find the slope between the two coastal points
 		 */
 		LOG.debug(String.format("targetPoint = %s\r\ncoastlinePoint1 = %s\r\ncoastlinePoint2 = %s", targetPoint, coastlinePoint1, coastlinePoint2));
+		if(coastlinePoint1.getLat().equals(coastlinePoint2.getLat()) && coastlinePoint1.getLng().equals(coastlinePoint2.getLng())) {
+			LOG.error("coastlinePoint1 and coastlinePoint2 are the same point! Check the database for duplicate coastline points.");
+			return null;
+		}
 		BigDecimal coastalSlope = getSlopeBetween(coastlinePoint1, coastlinePoint2);
+		
 		
 		/*
 		 * Next calculate the x,y intersection between the coastal point and the target point

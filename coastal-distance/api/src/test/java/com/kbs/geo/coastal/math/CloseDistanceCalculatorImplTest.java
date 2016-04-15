@@ -98,5 +98,19 @@ public class CloseDistanceCalculatorImplTest {
 		// The result should be null because there is no perpendicular intersection between the target point and either of the two sets of coastline points
 		assertNull(result);
 	}
+	
+	@Test
+	public void testCalculateLakeInLA() {
+		LatLng targetPoint = new LatLng(30.334118,-90.321844);
+		CoastlinePoint coastlinePoint1 = new CoastlinePoint(30.321174, -90.285816, 0.0);
+		CoastlinePoint coastlinePoint2 = new CoastlinePoint(30.317321,-90.289249, 0.0);
+		CoastlinePoint coastlinePoint3 = new CoastlinePoint(30.317321,-90.289249, 0.0);
+		
+		CloseDistanceCalculatorImpl calculator = new CloseDistanceCalculatorImpl(targetPoint, coastlinePoint1, coastlinePoint2, coastlinePoint3);
+		DistanceCalculatorResult result = calculator.calculate();
+		// The result should be null because there is no perpendicular intersection between the target point and either of the two sets of coastline points
+		assertNull(result);
+	}
+
 
 }

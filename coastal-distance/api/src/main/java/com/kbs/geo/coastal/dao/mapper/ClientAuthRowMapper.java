@@ -4,9 +4,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 import com.kbs.geo.coastal.model.billing.ClientAuth;
 
+@Component
 public class ClientAuthRowMapper implements RowMapper<ClientAuth> {
 	
 	@Override

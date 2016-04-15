@@ -74,15 +74,8 @@ public class PreProcessNearestCoastlinePointHierarchicalAutomated {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(PreProcessNearestCoastlinePointHierarchicalAutomated.class);
 	private static final int BATCH_THRESHOLD = 200;
-//	private static final Double EARTH_CIRCUMFERENCE_IN_STATUTE_MILES = 3963.1; // See http://www8.nau.edu/cvm/latlon_formula.html
-/*	private static final Double MILES_PER_LATITUDE = 69.0;
-	private static final Double MILES_PER_LONGITUDE = 53.0;
-	private Double BOUNDING_BOX_MILES_PER_SIDE = 8.0;*/
 	// Expand the search area so that it will encompass any box that encompasses our target point, and add a little slush
 	private Double BOUNDING_BOX_OFFSET = 0.5; // about 8 miles (69 * 0.125)
-//	private Double BOUNDING_BOX_OFFSET_LAT = (1 / (MILES_PER_LATITUDE / BOUNDING_BOX_MILES_PER_SIDE)) + 0.1;
-//	private Double BOUNDING_BOX_OFFSET_LON = (1 / (MILES_PER_LONGITUDE / BOUNDING_BOX_MILES_PER_SIDE)) + 0.1;
-	private static final int TOTAL_GRID_POINTS = 16985;
 	private int GRID_POINTS_UPDATED = 0;
 	
 	private final Long INCREMENT = 200L;
@@ -93,9 +86,6 @@ public class PreProcessNearestCoastlinePointHierarchicalAutomated {
 	private CoastlinePointDao coastlinePointDao;
 	@Autowired
 	private GridPointDao gridPointDao;
-	
-//	private String previousGridPointLevel = "256";
-//	private String targetGridPointLevel = "256";
 	
 	private Integer kbsClientId = 1;
 	private Integer currentClientId = 2;
@@ -109,7 +99,7 @@ public class PreProcessNearestCoastlinePointHierarchicalAutomated {
 		gridPointDao = (GridPointDao)SpringContextHolder.context.getBean(GridPointDao.class);*/
 	}
 	
-	@RequestMapping("/preprocessHierarchical")
+//	@RequestMapping("/preprocessHierarchical")
 	public void process() {
 		if(process256Target()) {
 			BOUNDING_BOX_OFFSET = 2.2;
@@ -124,7 +114,7 @@ public class PreProcessNearestCoastlinePointHierarchicalAutomated {
 							if(processHierarchicalTarget("16", "8")) {
 								moveGridPointsToFinalRestingSpot("8");
 								BOUNDING_BOX_OFFSET = 0.3;
-								//processFinalGridPoints("8");
+//								processFinalGridPoints("8");
 							}
 						} else LOG.error("Processing grid_point_16 returned error!");
 					} else LOG.error("Processing grid_point_32 returned error!");
@@ -341,7 +331,7 @@ public class PreProcessNearestCoastlinePointHierarchicalAutomated {
 	}
 	
 	private void printStatus() {
-		LOG.info("{} of {} grid points updated ({}%)", new Number[] { GRID_POINTS_UPDATED, TOTAL_GRID_POINTS, (GRID_POINTS_UPDATED / TOTAL_GRID_POINTS) * 100.0 });
+		LOG.info("{} grid points updated", new Number[] { GRID_POINTS_UPDATED });
 	}
 	
 	class BruteForceDistanceToCoastCalculator implements Runnable {
