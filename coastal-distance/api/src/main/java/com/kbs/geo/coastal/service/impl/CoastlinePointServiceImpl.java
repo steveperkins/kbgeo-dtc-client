@@ -1,10 +1,8 @@
 package com.kbs.geo.coastal.service.impl;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +10,6 @@ import com.kbs.geo.coastal.dao.CoastlinePointDao;
 import com.kbs.geo.coastal.dao.GridPointDao;
 import com.kbs.geo.coastal.http.exception.InvalidLatLngException;
 import com.kbs.geo.coastal.math.CloseDistanceCalculatorImpl;
-import com.kbs.geo.coastal.math.CloseDistanceCalculatorSlopeComparisonImpl;
 import com.kbs.geo.coastal.math.DefaultDistanceCalculatorImpl;
 import com.kbs.geo.coastal.math.DistanceCalculator;
 import com.kbs.geo.coastal.math.DistanceCalculatorResult;
@@ -30,7 +27,7 @@ public class CoastlinePointServiceImpl implements CoastlinePointService {
 
 //	private static final Double EARTH_CIRCUMFERENCE_IN_STATUTE_MILES = 3963.1; // See http://www8.nau.edu/cvm/latlon_formula.html
 //	private static final Double EARTH_RADIUS_IN_MILES = 3959.87433;	
-	private final Logger LOG = LoggerFactory.getLogger(CoastlinePointServiceImpl.class);
+	private static final Logger LOG = Logger.getLogger(CoastlinePointServiceImpl.class);
 	
 	@Autowired
 	private CoastlinePointDao coastlinePointDao;
@@ -68,7 +65,7 @@ public class CoastlinePointServiceImpl implements CoastlinePointService {
 		MinMaxCoastlinePointSortOrder boundingCoastlinePointSortOrders = gridPointDao.getBoundingCoastlinePointSortOrders(clientId, targetPoint);
 		if(null == boundingCoastlinePointSortOrders) throw new InvalidLatLngException("Lat/lng is out of bounds");
 		
-		LOG.debug(String.format("Getting sort orders between %f and %f", boundingCoastlinePointSortOrders.getMin(), boundingCoastlinePointSortOrders.getMax()));
+		LOG.trace(String.format("Getting sort orders between %f and %f", boundingCoastlinePointSortOrders.getMin(), boundingCoastlinePointSortOrders.getMax()));
 		
 		// Get the points surrounding the target point
 		List<GridPoint> boundingGridPoints = gridPointDao.getPointsSurrounding(kbContext.getClientAuth().getClientId(), targetPoint);
@@ -84,9 +81,9 @@ public class CoastlinePointServiceImpl implements CoastlinePointService {
 		Double minimumMiles = 9999.0;
 		for(CoastlinePoint coastlinePoint: coastlinePoints) {
 			Double milesBetween = getMilesBetween(targetPoint, coastlinePoint);
-			LOG.debug(String.format("Coastline point %s with sort order %f is %f miles from target", coastlinePoint, coastlinePoint.getSortOrder(), milesBetween));
+			LOG.trace(String.format("Coastline point %s with sort order %f is %f miles from target", coastlinePoint, coastlinePoint.getSortOrder(), milesBetween));
 			if(milesBetween < minimumMiles) {
-				LOG.debug(String.format("Coastline point %s with sort order %f is the new winner at %f miles from target", coastlinePoint, coastlinePoint.getSortOrder(), milesBetween));
+				LOG.trace(String.format("Coastline point %s with sort order %f is the new winner at %f miles from target", coastlinePoint, coastlinePoint.getSortOrder(), milesBetween));
 				minimumMiles = milesBetween;
 				closestCoastlinePoint = coastlinePoint;
 			}

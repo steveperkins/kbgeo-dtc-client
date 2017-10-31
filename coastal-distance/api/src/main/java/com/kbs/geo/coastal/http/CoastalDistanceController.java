@@ -2,8 +2,7 @@ package com.kbs.geo.coastal.http;
 
 import java.math.BigDecimal;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +27,7 @@ import com.kbs.geo.coastal.validator.LatLngValidator;
 @RestController
 @RequestMapping(value="coastal-distance")
 public class CoastalDistanceController {
-	private static final Logger LOG = LoggerFactory.getLogger(CoastalDistanceController.class);
+	private static final Logger LOG = Logger.getLogger(CoastalDistanceController.class);
 	
 	@Autowired
 	private CoastlinePointService coastlinePointService;
@@ -59,7 +58,7 @@ public class CoastalDistanceController {
 		new AddressValidator().validate(address);
     	LOG.info(String.format("GET JSON /coastal-distance/v%d/address?address=%s", version, address));
     	address = AccentStripper.stripAccents(address);
-    	LOG.debug("Address stripped of accents: {}", address);
+    	LOG.debug(String.format("Address stripped of accents: %s", address));
     	
     	// Geocode this address
     	GeocodeResult geocodeResult = geocodeService.geocode(address);

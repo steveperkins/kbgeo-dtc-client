@@ -7,8 +7,7 @@ import java.util.Date;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -29,7 +28,7 @@ import com.kbs.geo.http.security.JsonWebTokenUtil;
 
 @RestController
 public class ConsoleAuthController {
-	private static final Logger LOG = LoggerFactory.getLogger(ConsoleAuthController.class);
+	private static final Logger LOG = Logger.getLogger(ConsoleAuthController.class);
 	
 	@Autowired
 	private ClientAuthWebService clientAuthWebService;
@@ -45,7 +44,7 @@ public class ConsoleAuthController {
     		@RequestHeader(value = HeaderConstants.CONSOLE_USER_NAME) String username,
     		@RequestHeader(value = HeaderConstants.CONSOLE_USER_PASSWORD) String base64EncodedPassword,
     		HttpServletResponse response) {
-		LOG.info("GET /console/auth for user {}", username);
+		LOG.info(String.format("GET /console/auth for user %s", username));
 		ClientAuthWeb clientAuth = clientAuthWebService.getByUsernamePassword(username, base64EncodedPassword);
 		if(null == clientAuth) throw new InvalidCredentialsException();
 		if(null != clientAuth.getExpires() && new Date().before(clientAuth.getExpires())) throw new ExpiredCredentialsException();
@@ -59,7 +58,7 @@ public class ConsoleAuthController {
     public @ResponseBody WebClientAuthResponse verifyJwtToken (
     		@RequestHeader(value = HeaderConstants.CONSOLE_SECURITY_TOKEN) String jwtToken,
     		HttpServletResponse response) {
-		LOG.info("GET /console/verify-token for token {}", jwtToken);
+		LOG.info(String.format("GET /console/verify-token for token %s", jwtToken));
 		Claims jwtClaims = jsonWebTokenUtil.parseJWT(jwtToken);
 		if(null == jwtClaims) throw new InvalidCredentialsException("Not a valid web token");
 		
@@ -83,7 +82,7 @@ public class ConsoleAuthController {
     public @ResponseBody String getUserInfo (
     		@RequestHeader(value = HeaderConstants.CONSOLE_SECURITY_TOKEN) String jwtToken,
     		HttpServletResponse response) {
-		LOG.info("GET /console/user-info for token {}", jwtToken);
+		LOG.info(String.format("GET /console/user-info for token {}", jwtToken));
 		Claims jwtClaims = jsonWebTokenUtil.parseJWT(jwtToken);
 		if(null == jwtClaims) throw new InvalidCredentialsException("Not a valid web token");
 		

@@ -56,9 +56,9 @@ public class RequestErrorDaoImpl extends AbstractDao<RequestError> implements Re
 				Types.INTEGER, // request type
 				Types.INTEGER, // response status
 				Types.NVARCHAR, // response body
-				Types.DATE, // request time
-				Types.DATE, // response time
-				Types.DATE // created date
+				Types.TIMESTAMP, // request time
+				Types.TIMESTAMP, // response time
+				Types.TIMESTAMP // created date
 		};
 	}
 	
@@ -72,8 +72,8 @@ public class RequestErrorDaoImpl extends AbstractDao<RequestError> implements Re
 				Types.INTEGER, // request type
 				Types.INTEGER, // response status
 				Types.NVARCHAR, // response body
-				Types.DATE, // request time
-				Types.DATE, // response time
+				Types.TIMESTAMP, // request time
+				Types.TIMESTAMP, // response time
 				Types.BIGINT // client ID
 		};
 	}

@@ -13,8 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -30,7 +29,7 @@ public class Main {
 		new Main().convertCoastalDataset();
 	}
 	
-	private static final Logger LOG = LoggerFactory.getLogger(DistanceGridServiceImpl.class);
+	private static final Logger LOG = Logger.getLogger(DistanceGridServiceImpl.class);
 //	private static final String DATA_FILE = "C:/Users/Steve/Downloads/netcdf-3.6.1-beta1-win32dll/dist2coast.txt";
 	private static final String DATA_FILE = "C:/Users/Steve/Downloads/netcdf-3.6.1-beta1-win32dll/us.txt";
 //	private static final String DATA_FILE = "/home/bitnami/dist2coast/dist2coast.txt";

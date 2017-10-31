@@ -1,7 +1,6 @@
 package com.kbs.geo.coastal.http.interceptor;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,7 @@ import com.kbs.geo.coastal.http.util.MediaTypeHelper;
 @EnableWebMvc
 @ControllerAdvice
 public class KbsExceptionMapper {
-	private static final Logger LOG = LoggerFactory.getLogger(KbsExceptionMapper.class);
+	private static final Logger LOG = Logger.getLogger(KbsExceptionMapper.class);
 	
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	@ExceptionHandler({ KbsRestException.class })

@@ -11,4 +11,5 @@ public interface ClientRequestDao {
 	ClientRequest get(Integer id);
 	List<ClientRequest> getByClientId(Integer clientId);
 	Long getCount(Integer clientId, Date beginDate, Date endDate, RequestType requestType);
+	Long getCount(Integer clientId, RequestType requestType);
 }

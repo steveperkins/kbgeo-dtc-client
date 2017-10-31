@@ -11,8 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
@@ -40,7 +39,7 @@ import com.kbs.geo.http.security.JsonWebTokenUtil;
  */
 @Component
 public class KbsApiWebClientAuthFilter extends GenericFilterBean {
-	private static final Logger LOG = LoggerFactory.getLogger(KbsApiWebClientAuthFilter.class);
+	private static final Logger LOG = Logger.getLogger(KbsApiWebClientAuthFilter.class);
 	
 	@Autowired
 	private ClientAuthWebService clientAuthService;

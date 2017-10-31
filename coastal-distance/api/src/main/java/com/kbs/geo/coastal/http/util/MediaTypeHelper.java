@@ -1,13 +1,12 @@
 package com.kbs.geo.coastal.http.util;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.http.InvalidMediaTypeException;
 import org.springframework.http.MediaType;
 
 public class MediaTypeHelper {
-	private static final Logger LOG = LoggerFactory.getLogger(MediaTypeHelper.class);
+	private static final Logger LOG = Logger.getLogger(MediaTypeHelper.class);
 	
 	public static MediaType getMediaType(String t) {
 		if(StringUtils.isBlank(t) || "*/*".equals(t)) return MediaType.APPLICATION_JSON;
@@ -16,7 +15,7 @@ public class MediaTypeHelper {
 		try {
 			mediaType = MediaType.parseMediaType(t);
 		} catch(InvalidMediaTypeException e) {
-			LOG.error("Could not parse media type '" + t + "', defaulting to application/json", e);
+			LOG.error(String.format("Could not parse media type '%s', defaulting to application/json", t), e);
 			mediaType = MediaType.APPLICATION_JSON;
 		}
 		return mediaType;

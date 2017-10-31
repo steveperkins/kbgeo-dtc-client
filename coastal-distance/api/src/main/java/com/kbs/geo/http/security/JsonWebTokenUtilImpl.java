@@ -1,10 +1,5 @@
 package com.kbs.geo.http.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-
 import java.security.Key;
 import java.util.Date;
 
@@ -13,16 +8,20 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.kbs.geo.coastal.http.exception.ExpiredSecurityTokenException;
 import com.kbs.geo.coastal.http.exception.InvalidSecurityTokenException;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
 @Service
 public class JsonWebTokenUtilImpl implements JsonWebTokenUtil {
-	private static final Logger LOG = LoggerFactory.getLogger(JsonWebTokenUtilImpl.class);
+	private static final Logger LOG = Logger.getLogger(JsonWebTokenUtilImpl.class);
 	
 	@Resource(name="jwt.secret")
 	private String jwtSecret;

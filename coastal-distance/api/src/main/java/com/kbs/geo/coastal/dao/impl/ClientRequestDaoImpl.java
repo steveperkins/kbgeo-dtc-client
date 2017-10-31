@@ -23,6 +23,7 @@ public class ClientRequestDaoImpl extends AbstractDao<ClientRequest> implements 
 	private static final String UPDATE_SQL = "UPDATE client_request SET client_auth_id=?, source_ip=?, request_url=? request_body=?, request_type_id=?, response_status=?, response_body=?, request_time=?, response_time=?, error=?, error_message=?, updated=? WHERE id=?";
 	private static final String SELECT_BY_ID_SQL = "SELECT * FROM client_request WHERE id=?";
 	private static final String SELECT_BY_CLIENT_ID_SQL = "SELECT cr.* FROM client_request cr JOIN client_auth ca ON cr.client_auth_id=ca.id WHERE ca.client_id=?";
+	private static final String COUNT_BY_CLIENT_ID_SQL = "SELECT COUNT(cr.id) FROM client_request cr JOIN client_auth ca ON cr.client_auth_id=ca.id WHERE ca.client_id=? AND request_type_id=?";
 	private static final String COUNT_BY_CLIENT_ID_DATE_RANGE_REQUEST_TYPE_SQL = "SELECT COUNT(cr.id) FROM client_request cr JOIN client_auth ca ON cr.client_auth_id=ca.id WHERE ca.client_id=? AND request_time BETWEEN ? AND ? AND request_type_id=?";
 	
 	@Autowired
@@ -49,6 +50,13 @@ public class ClientRequestDaoImpl extends AbstractDao<ClientRequest> implements 
 	}
 	
 	@Override
+	public Long getCount(Integer clientId, RequestType requestType) {
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
+		Long count = jdbcTemplate.queryForObject(COUNT_BY_CLIENT_ID_SQL, Long.class, clientId, requestType.getId());
+		return count;
+	}
+	
+	@Override
 	public Long getCount(Integer clientId, Date beginDate, Date endDate, RequestType requestType) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
 		Long count = jdbcTemplate.queryForObject(COUNT_BY_CLIENT_ID_DATE_RANGE_REQUEST_TYPE_SQL, Long.class, clientId, beginDate, endDate, requestType.getId());
@@ -65,11 +73,11 @@ public class ClientRequestDaoImpl extends AbstractDao<ClientRequest> implements 
 				Types.INTEGER, // request type
 				Types.INTEGER, // response status
 				Types.NVARCHAR, // response body
-				Types.DATE, // request time
-				Types.DATE, // response time
+				Types.TIMESTAMP, // request time
+				Types.TIMESTAMP, // response time
 				Types.BIT, // error
 				Types.VARCHAR, // error message
-				Types.DATE, // created date
+				Types.TIMESTAMP, // created date
 		};
 	}
 	
@@ -83,11 +91,11 @@ public class ClientRequestDaoImpl extends AbstractDao<ClientRequest> implements 
 				Types.INTEGER, // request type
 				Types.INTEGER, // response status
 				Types.NVARCHAR, // response body
-				Types.DATE, // request time
-				Types.DATE, // response time
+				Types.TIMESTAMP, // request time
+				Types.TIMESTAMP, // response time
 				Types.BIT, // error
 				Types.VARCHAR, // error message
-				Types.DATE, // updated date
+				Types.TIMESTAMP, // updated date
 				Types.BIGINT // client ID
 		};
 	}

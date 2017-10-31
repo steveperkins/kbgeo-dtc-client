@@ -1,7 +1,5 @@
 package com.kbs.geo.coastal.http.interceptor;
 
-import io.jsonwebtoken.Claims;
-
 import java.io.IOException;
 
 import javax.servlet.FilterChain;
@@ -12,8 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
@@ -32,6 +29,8 @@ import com.kbs.geo.coastal.service.RequestErrorService;
 import com.kbs.geo.http.security.JsonWebTokenUtil;
 import com.kbs.geo.http.security.KbConsoleUserContext;
 
+import io.jsonwebtoken.Claims;
+
 /**
  * Implements Json Web Token security for users of the KB Geo web console
  * @author Steve
@@ -39,7 +38,7 @@ import com.kbs.geo.http.security.KbConsoleUserContext;
  */
 @Component
 public class KbsApiWebClientSecurityFilter extends GenericFilterBean {
-	private static final Logger LOG = LoggerFactory.getLogger(KbsApiWebClientSecurityFilter.class);
+	private static final Logger LOG = Logger.getLogger(KbsApiWebClientSecurityFilter.class);
 	
 	@Autowired
 	private ApiSecurityService apiSecurityService;

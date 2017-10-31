@@ -7,19 +7,11 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.kbs.geo.coastal.dao.GridPoint128Dao;
-import com.kbs.geo.coastal.dao.GridPoint16Dao;
-import com.kbs.geo.coastal.dao.GridPoint32Dao;
 import com.kbs.geo.coastal.dao.GridPoint64Dao;
-import com.kbs.geo.coastal.dao.GridPoint8Dao;
 import com.kbs.geo.coastal.model.CoastlinePoint;
 import com.kbs.geo.coastal.model.GridPoint;
 import com.kbs.geo.coastal.model.LatLng;
@@ -40,7 +32,7 @@ import com.kbs.geo.coastal.service.CoastlinePointService;
 //@RestController
 public class CreateUSGridPointsSecondaryController {
 
-	private static final Logger LOG = LoggerFactory.getLogger(CreateUSGridPointsSecondaryController.class);
+	private static final Logger LOG = Logger.getLogger(CreateUSGridPointsSecondaryController.class);
 	// Record only lat/lon within the continental US
 	private static final BigDecimal MAX_LATITUDE = new BigDecimal(50.0);
 	private static final BigDecimal MAX_LONGITUDE = new BigDecimal(-70.0);

@@ -80,6 +80,12 @@ input.error {
 #stats .responseTime {
 	color: #9BFF00;
 }
+#freeTrial a {
+	color: #9BFF00;
+}
+#freeTrial a:hover {
+	color: white;
+}
 
 .map-label {
 	color: black;

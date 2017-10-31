@@ -4,8 +4,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import com.kbs.geo.coastal.model.GeoCoordinate;
 import com.kbs.geo.coastal.model.LatLng;
@@ -17,7 +16,7 @@ import com.kbs.geo.coastal.model.LatLng;
  */
 public class CloseDistanceCalculatorSlopeComparisonImpl implements DistanceCalculator {
 	private static final MathContext MATH_CONTEXT = new MathContext(16, RoundingMode.HALF_UP);
-	private final Logger LOG = LoggerFactory.getLogger(CloseDistanceCalculatorSlopeComparisonImpl.class);
+	private static final Logger LOG = Logger.getLogger(CloseDistanceCalculatorSlopeComparisonImpl.class);
 	private GeoCoordinate targetPoint;
 	private GeoCoordinate coastlinePoint1;
 	private GeoCoordinate coastlinePoint2;
@@ -127,14 +126,14 @@ public class CloseDistanceCalculatorSlopeComparisonImpl implements DistanceCalcu
 //			BigDecimal intersectionLat = (coastalSlopeSquared * x1 + coastalSlope * (yr - y1) + xr) / (coastalSlopeSquared + 1);
 //			BigDecimal intersectionLng = (coastalSlopeSquared * yr + coastalSlope * (xr - x1) + y1) / (coastalSlopeSquared + 1);
 			
-			LOG.debug("m = {}", coastalSlope);
-			LOG.debug("m-squared = {}", coastalSlopeSquared);
-			LOG.debug("x1, y1 = {}, {}", x1, y1);
-			LOG.debug("xr, yr = {}, {}", xr, yr);
-			LOG.debug("Intersection lat = {}", String.format("(%f * %f + %f * (%f - %f) + %f) / (%f + 1)", coastalSlopeSquared, x1, coastalSlope, yr, y1, xr, coastalSlopeSquared));
-			LOG.debug("Intersection lng = {}", String.format("(%f * %f + %f * (%f - %f) + %f) / (%f + 1)", coastalSlopeSquared, yr, coastalSlope, xr, x1, y1, coastalSlopeSquared));
+			LOG.debug(String.format("m = %s", String.valueOf(coastalSlope)));
+			LOG.debug(String.format("m-squared = %s", String.valueOf(coastalSlopeSquared)));
+			LOG.debug(String.format("x1, y1 = %s, %s", String.valueOf(x1), String.valueOf(y1)));
+			LOG.debug(String.format("xr, yr = %s, %s", String.valueOf(xr), String.valueOf(yr)));
+			LOG.debug("Intersection lat = " + String.format("(%f * %f + %f * (%f - %f) + %f) / (%f + 1)", coastalSlopeSquared, x1, coastalSlope, yr, y1, xr, coastalSlopeSquared));
+			LOG.debug("Intersection lng = " + String.format("(%f * %f + %f * (%f - %f) + %f) / (%f + 1)", coastalSlopeSquared, yr, coastalSlope, xr, x1, y1, coastalSlopeSquared));
 			
-			LOG.debug("Intersection: {}, {}", intersectionLat, intersectionLng);
+			LOG.debug(String.format("Intersection: %s, %s", String.valueOf(intersectionLat), String.valueOf(intersectionLng)));
 			
 			DistanceCalculatorResult result =  new DefaultDistanceCalculatorImpl(targetPoint, new LatLng(intersectionLat, intersectionLng)).calculate();
 			result.getCoastlinePoint().setLat(intersectionLat);

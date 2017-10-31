@@ -13,8 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
@@ -28,7 +27,7 @@ import com.kbs.geo.coastal.http.exception.InvalidSecurityTokenException;
  */
 @Component
 public class KbsRoutingFilter extends GenericFilterBean {
-	private static final Logger LOG = LoggerFactory.getLogger(KbsRoutingFilter.class);
+	private static final Logger LOG = Logger.getLogger(KbsRoutingFilter.class);
 	private static final String CONSOLE_AUTH_PATH = "/api/console/auth";
 	private static final String CONSOLE_VERIFY_TOKEN_PATH = "/api/console/verify-token";
 	private static final String CONSOLE_STARTSWITH_PATH = "/api/console";

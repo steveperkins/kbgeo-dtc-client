@@ -2,11 +2,8 @@ package com.kbs.geo.coastal.http.interceptor;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
-import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -16,10 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -39,7 +34,7 @@ import com.kbs.geo.http.security.KbApiAuthContext;
 
 @Component
 public class KbsApiClientSecurityFilter extends GenericFilterBean {
-	private static final Logger LOG = LoggerFactory.getLogger(KbsApiClientSecurityFilter.class);
+	private static final Logger LOG = Logger.getLogger(KbsApiClientSecurityFilter.class);
 
 	@Autowired
 	private ApiSecurityService apiSecurityService;

@@ -12,8 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +22,7 @@ import com.kbs.geo.coastal.http.exception.IpNotAuthorizedException;
 import com.kbs.geo.coastal.http.exception.KbsRestException;
 import com.kbs.geo.coastal.http.exception.MissingSecurityTokenException;
 import com.kbs.geo.coastal.http.exception.RefererNotAuthorizedException;
+import com.kbs.geo.coastal.http.exception.RequestLimitReachedException;
 import com.kbs.geo.coastal.http.exception.ServiceNotAllocatedException;
 import com.kbs.geo.coastal.model.billing.ClientAuth;
 import com.kbs.geo.coastal.model.billing.ClientAuthIp;
@@ -39,7 +39,7 @@ import com.kbs.geo.coastal.service.RequestErrorService;
 
 @Component
 public class ApiSecurityService {
-	private static final Logger LOG = LoggerFactory.getLogger(ApiSecurityService.class);
+	private static final Logger LOG = Logger.getLogger(ApiSecurityService.class);
 	
 	@Autowired
 	private ClientRequestService clientRequestService;
@@ -115,7 +115,7 @@ public class ApiSecurityService {
 				throw ex;
 			}
 		}
-		LOG.info("Source IP ({}) is OK", sourceIp);
+		LOG.info(String.format("Source IP (%s) is OK", sourceIp));
 		
 		// Check for source IP filters
 		List<ClientAuthReferer> authReferers = clientAuthRefererService.getByClientAuthId(clientAuth.getId());
@@ -131,9 +131,9 @@ public class ApiSecurityService {
 				throw ex;
 			}
 			
-			LOG.info("Referrer is {}", referrer);
+			LOG.info(String.format("Referrer is %s", referrer));
 			referrer = getNakedUrlDomain(referrer);
-			LOG.info("Naked referrer is {}", referrer);
+			LOG.info(String.format("Naked referrer is %s", referrer));
 			Boolean referrerFound = Boolean.FALSE;
 			for(ClientAuthReferer authReferer: authReferers) {
 				List<String> separatedReferers = Arrays.asList(authReferer.getReferers().split(","));
@@ -169,6 +169,15 @@ public class ApiSecurityService {
 		}
 		LOG.info("Found valid contract for this auth token");
 		
+		// -1 == no limit
+		if(validContract.getMaxRequests() > -1) {
+			Long currentRequestCount = clientRequestService.getRequestCount(clientId, RequestType.DISTANCE_TO_COAST);
+			if(currentRequestCount >= validContract.getMaxRequests()) {
+				KbsRestException ex = new RequestLimitReachedException();
+				recordError(null, ex, httpServletRequest, httpServletResponse);
+				LOG.error("Client " + clientId + " is over limit: " + currentRequestCount + " of " + validContract.getMaxRequests() + " successful requests have been received", ex);	
+			}
+		}
 		return clientAuth;
 	}
 	

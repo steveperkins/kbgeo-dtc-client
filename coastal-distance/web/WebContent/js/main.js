@@ -8,36 +8,62 @@ jQuery(function($) {
 	});
 
 	//Ajax contact
-	$('.contact-form').submit(function () {
+	$('.contact-form').submit(function (event) {
+		event.preventDefault();
 		$this = $(this);
 		
 		// Validate input
-		var emailNameControl = $("#emailName");
-		var emailAddressControl = $("#emailAddress");
+		var contactNameControl = $("#contactName");
+		var contactEmailControl = $("#contactEmail");
+		var contactMessageControl = $("#contactMessage");
 		
-		emailNameControl.removeClass("has-error");
-		emailAddressControl.removeClass("has-error");
+		contactNameControl.removeClass("has-error");
+		contactEmailControl.removeClass("has-error");
+		contactMessageControl.removeClass("has-error");
 		
 		var error = false;
 		
-		var emailName = emailNameControl.val();
-		if(!emailName) {
+		var contactName = contactNameControl.val();
+		if(!contactName) {
 			error = true;
-			emailNameControl.addClass("has-error");
+			contactNameControl.addClass("has-error");
 		}
-		var emailAddress = emailNameControl.val();
+		var contactEmail = contactEmailControl.val();
 		var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-		if(!emailAddress || !re.test(emailAddress)) {
+		if(!contactEmail || !re.test(contactEmail)) {
 			error = true;
-			emailAddressControl.addClass("has-error");
+			contactEmailControl.addClass("has-error");
+		}
+		var contactMessage = contactMessageControl.val();
+		if(!contactMessage) {
+			error = true;
+			contactMessageControl.addClass("has-error");
 		}
 		if(error) return;
 		
+		var contactPhone = $("#contactPhone").val();
+		var contactCompany = $("#contactCompany").val();
+		var contactFreeTrialKey = document.getElementById("contactFreeTrialKey").checked;
 		// Send the message
-		$.post($(this).attr('action'), function(data) {
-			$this.prev().text(data.message).fadeIn().delay(3000).fadeOut();
-		},'json');
-		
+		$.ajax({
+			type: 'POST',
+			url: 'http://biz.kbgeo.com/contact-us',
+			headers: { "Referer": "kbgeo.com", "kb-auth-token": "gaA34o32" },
+			data: JSON.stringify({
+					name: contactName,
+					company: contactCompany,
+					email: contactEmail,
+					phone: contactPhone,
+					message: contactMessage,
+					requestFreeTrial: contactFreeTrialKey
+				}),
+			success: function(data) {
+				$("#main-contact-form").prev().text(data.message).fadeIn().delay(3000).fadeOut();
+				$("#contactUsSubmit").attr("disabled", true);
+			},
+			contentType: 'application/json',
+			dataType: 'json'
+		});
 		
 		return false;
 	});

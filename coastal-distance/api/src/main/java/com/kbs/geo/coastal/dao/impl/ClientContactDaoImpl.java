@@ -18,7 +18,7 @@ import com.kbs.geo.coastal.model.billing.ClientContact;
 
 @Component
 public class ClientContactDaoImpl extends AbstractDao<ClientContact> implements ClientContactDao {
-	private static final String INSERT_SQL = "INSERT INTO client_contact (client_id, last_name, first_name, email, address, city, state, zip, phone, is_primary, created) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private static final String INSERT_SQL = "INSERT INTO client_contact (client_id, last_name, first_name, email, address, city, state, zip, phone, is_primary, created) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String UPDATE_SQL = "UPDATE client_contact SET client_id=?, last_name=?, first_name=? email=?, address=?, city=?, state=?, zip=?, phone=?, updated=? WHERE id=?";
 	private static final String SELECT_BY_ID_SQL = "SELECT * FROM client_contact WHERE id=?";
 	private static final String SELECT_BY_CLIENT_ID_SQL = "SELECT * FROM client_contact WHERE client_id=?";
@@ -49,15 +49,16 @@ public class ClientContactDaoImpl extends AbstractDao<ClientContact> implements 
 	@Override
 	protected int[] getInsertParamTypes() {
 		return new int[] { 
-				Types.BIGINT, // id
-				Types.VARCHAR, // source IP
-				Types.VARCHAR, // request URL
-				Types.NVARCHAR, // request body
-				Types.INTEGER, // request type
-				Types.INTEGER, // response status
-				Types.NVARCHAR, // response body
-				Types.DATE, // request time
-				Types.DATE, // response time
+				Types.BIGINT, // client id
+				Types.VARCHAR, // last name
+				Types.VARCHAR, // first name
+				Types.VARCHAR, // email
+				Types.VARCHAR, // address
+				Types.VARCHAR, // city
+				Types.VARCHAR, // state
+				Types.VARCHAR, // zip
+				Types.VARCHAR, // phone
+				Types.BOOLEAN, // primary flag
 				Types.DATE // created date
 		};
 	}
@@ -65,17 +66,18 @@ public class ClientContactDaoImpl extends AbstractDao<ClientContact> implements 
 	@Override
 	protected int[] getUpdateParamTypes() {
 		return new int[] { 
-				Types.BIGINT, // id
-				Types.VARCHAR, // source IP
-				Types.VARCHAR, // request URL
-				Types.NVARCHAR, // request body
-				Types.INTEGER, // request type
-				Types.INTEGER, // response status
-				Types.NVARCHAR, // response body
-				Types.DATE, // request time
-				Types.DATE, // response time
-				Types.DATE, // updated date
-				Types.BIGINT // client ID
+				Types.BIGINT, // client id
+				Types.VARCHAR, // last name
+				Types.VARCHAR, // first name
+				Types.VARCHAR, // email
+				Types.VARCHAR, // address
+				Types.VARCHAR, // city
+				Types.VARCHAR, // state
+				Types.VARCHAR, // zip
+				Types.VARCHAR, // phone
+				Types.BOOLEAN, // primary flag
+				Types.DATE, // created date
+				Types.BIGINT // ID
 		};
 	}
 	

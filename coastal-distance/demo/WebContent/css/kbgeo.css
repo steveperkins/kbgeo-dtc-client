@@ -89,6 +89,18 @@ input.error {
 	color: #9BFF00;
 }
 
+#freeTrial {
+	text-align: center;
+	margin-top: 40px;
+}
+
+#freeTrial a {
+	color: #9BFF00;
+}
+#freeTrial a:hover {
+	color: white;
+}
+
 .map-label {
 	color: black;
 	background-color: white;

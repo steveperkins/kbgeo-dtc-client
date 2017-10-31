@@ -1,7 +1,6 @@
 package com.kbs.geo.coastal;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +12,7 @@ import com.kbs.geo.coastal.scheduled.ScheduledTasks;
 @RestController
 public class GenerateStatisticsController {
 
-	private static final Logger LOG = LoggerFactory.getLogger(GenerateStatisticsController.class);
+	private static final Logger LOG = Logger.getLogger(GenerateStatisticsController.class);
 	
 	@Autowired
 	private ScheduledTasks scheduledTasks;

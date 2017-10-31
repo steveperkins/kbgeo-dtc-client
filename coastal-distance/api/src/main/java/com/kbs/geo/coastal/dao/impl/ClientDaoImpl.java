@@ -18,7 +18,7 @@ import com.kbs.geo.coastal.model.billing.Client;
 
 @Component
 public class ClientDaoImpl extends AbstractDao<Client> implements ClientDao {
-	private static final String INSERT_SQL = "INSERT INTO kbs_client (name, address, city, state, zip, phone, created) VALUES(?, ?, ?, ?, ?, ?)";
+	private static final String INSERT_SQL = "INSERT INTO kbs_client (name, address, city, state, zip, phone, created) VALUES(?, ?, ?, ?, ?, ?, ?)";
 	private static final String UPDATE_SQL = "UPDATE kbs_client SET name=?, address=?, city=?, state=?, zip=?, phone=?, updated=? WHERE id=?";
 	private static final String SELECT_BY_ID_SQL = "SELECT * FROM kbs_client WHERE id=?";
 	private static final String SELECT_BY_ACTIVE_SQL = "SELECT kc.* FROM kbs_client kc INNER JOIN client_contract cc ON kc.id=cc.client_id WHERE CURRENT_TIMESTAMP() BETWEEN starts AND expires";
@@ -55,15 +55,12 @@ public class ClientDaoImpl extends AbstractDao<Client> implements ClientDao {
 	@Override
 	protected int[] getInsertParamTypes() {
 		return new int[] { 
-				Types.BIGINT, // id
-				Types.VARCHAR, // source IP
-				Types.VARCHAR, // request URL
-				Types.NVARCHAR, // request body
-				Types.INTEGER, // request type
-				Types.INTEGER, // response status
-				Types.NVARCHAR, // response body
-				Types.DATE, // request time
-				Types.DATE, // response time
+				Types.VARCHAR, // name
+				Types.VARCHAR, // address
+				Types.VARCHAR, // city
+				Types.VARCHAR, // state
+				Types.VARCHAR, // zip
+				Types.VARCHAR, // phone
 				Types.DATE // created date
 		};
 	}
@@ -71,23 +68,21 @@ public class ClientDaoImpl extends AbstractDao<Client> implements ClientDao {
 	@Override
 	protected int[] getUpdateParamTypes() {
 		return new int[] { 
-				Types.BIGINT, // id
-				Types.VARCHAR, // source IP
-				Types.VARCHAR, // request URL
-				Types.NVARCHAR, // request body
-				Types.INTEGER, // request type
-				Types.INTEGER, // response status
-				Types.NVARCHAR, // response body
-				Types.DATE, // request time
-				Types.DATE, // response time
-				Types.DATE, // updated date
-				Types.BIGINT // client ID
+				Types.VARCHAR, // name
+				Types.VARCHAR, // address
+				Types.VARCHAR, // city
+				Types.VARCHAR, // state
+				Types.VARCHAR, // zip
+				Types.VARCHAR, // phone
+				Types.DATE, // created date
+				Types.BIGINT
 		};
 	}
 	
 	protected Integer create(Client client) {
 		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
+		Date dateCreated = new Date();
 		jdbcTemplate.update(getInsertStatementFactory().newPreparedStatementCreator(new Object[] { 
 				client.getName(),
 				client.getAddress(),
@@ -95,7 +90,7 @@ public class ClientDaoImpl extends AbstractDao<Client> implements ClientDao {
 				client.getState(),
 				client.getZip(),
 				client.getPhone(),
-				new Date()
+				dateCreated
 		}), keyHolder);
 		
 		client.setId(keyHolder.getKey().intValue());

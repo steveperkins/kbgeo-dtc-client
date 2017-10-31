@@ -3,14 +3,22 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="KB GeoRisk provides fast, accurate, inexpensive distance-to-coast calculation to insurance risk and other industries as an easily-integrated web service">
-    <meta name="author" content="Steve Perkins, KB GeoRisk">
-    <title>KB GeoRisk</title>
+    <meta name="description" content="KB Geo provides fast, accurate, inexpensive distance to coast/distance to shoreline/distance to water calculations for insurance risk and other industries as an easily-integrated web service">
+    <meta name="keywords" content="coast,shoreline,water,distance,distance to coast,coastal distance api,distance to shoreline,distance to sea,distance to water,distance from coast,distance from shoreline,distance from sea,calculator,calculate,tool,map,mapping,api,web service,rest,fast,secure,risk,risks,evaluate,geospatial,insurance,sea,ocean,water,property,distance,mga,wholesale,lloyds,hurricane,flood,wind,maprisk">
+    <meta name="author" content="Steve Perkins, KB Geo">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Distance to Coast Web Service">
+    <meta property="og:url" content="http://www.kbgeo.com">
+    <meta property="og:site_name" content="KB Geo">
+    <title>KB Geo - Distance to Coast</title>
+    <link rel="canonical" href="http://www.kbgeo.com">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <link href="css/prettyPhoto.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
     <link href="css/kbgeo.css" rel="stylesheet">
+    
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
     <script src="js/respond.min.js"></script>
@@ -29,7 +37,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="/"><span class="kb-logo-text">KB <span class="color2">Geo</span>Risk</span></a>
+                    <a class="navbar-brand" href="/"><span class="kb-logo-text">KB <span class="color2">Geo</span></span></a>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
@@ -39,6 +47,7 @@
                         <li><a href="#comparison">Features</a></li>
                         <li><a href="#documentation">Documentation</a></li>
                         <li><a href="#contact">Contact</a></li>
+                        <li><a href="#faq">FAQ</a></li>
                     </ul>
                 </div>
             </div>
@@ -48,14 +57,6 @@
     <section id="main-slider" class="carousel">
         <div class="carousel-inner">
             <div class="item active">
-                <div class="container">
-                    <div class="carousel-content">
-                        <h1>Low-cost Distance to Coast</h1>
-                        <p class="lead"><strong>Great service at a fair price</strong></p>
-                    </div>
-                </div>
-            </div><!--/.item-->
-            <div class="item">
                 <div class="container">
                     <div class="carousel-content">
                         <h1>Distance to Coast <i>fast</i></h1>
@@ -117,9 +118,9 @@
                     </div><!--/.col-md-4-->
                     <div class="col-md-4 col-sm-6">
                         <div class="center">
-                            <i class="color2 fa fa-money fa-5x"></i>
-                            <h1>Fair.</h1>
-                            <p>Reasonably-priced distance to coast.</p>
+                            <i class="color2 fa fa-check-circle-o fa-5x"></i>
+                            <h1>Easy.</h1>
+                            <p>Easy to integrate, fully documented.</p>
                         </div>
                     </div><!--/.col-md-4-->
                 </div><!--/.row-->
@@ -127,7 +128,7 @@
         </div><!--/.container-->
     </section><!--/#services-->
 
-	<div class="big-gap"></div>
+	<div class="gap"></div>
     <section id="demo" class="center">
 		<div class="container">
             <div class="box">
@@ -136,7 +137,7 @@
                 </div><!--/.center-->   
                 <div class="row">
                     <div class="col-md-12">
-						<a class="btn btn-default btn-lg" href="http://demo.kbgeo.com">Try it live!</a>
+						<a class="btn btn-default btn-lg" href="http://demo.kbgeo.com">Try it now for FREE!</a>
                     </div><!--/.col-md-12-->
                 </div>
             </div> 
@@ -150,13 +151,39 @@
                 <div class="center">
                     <h2>Features</h2>
                 </div><!--/.center-->   
-                <div id="comparison-table" class="row">
-					<div class="col-sm-12 col-md-12 col-lg-12">
-						<table class="table table-striped table-hover">
+                <div id="comparison-table">
+                	<div class="row">
+						<div class="feature-label col-sm-2"></div>
+						<div class="section-primary col-sm-6">KB Geo</div>
+						<div class="col-sm-4">Competitors</div>
+					</div>
+					<div class="row">
+						<div class="feature-label col-sm-2"><i class="fa fa-motorcycle"></i> Speed</div>
+						<div class="section-primary col-sm-6">Under <strong>2 seconds</strong></div>
+						<div class="col-sm-4">45 seconds to <strong>2 minutes</strong></div>
+					</div>
+					<div class="row">
+						<div class="feature-label col-sm-2"><i class="fa fa-usd"></i> Pricing</div>
+						<div class="section-primary col-sm-6">Far less than competitors</div>
+						<div class="col-sm-4">More than <strong>$1.00/call</strong></div>
+					</div>
+					<div class="row">
+						<div class="feature-label col-sm-2"><i class="fa fa-lock"></i> Security</div>
+						<div class="section-primary col-sm-6">Auth token, IP binding, domain binding, SSL Encryption</div>
+						<div class="col-sm-4">Plaintext password</strong> in URL</div>
+					</div>
+					<div class="row">
+						<div class="feature-label col-sm-2"><i class="fa fa-phone"></i> Support</div>
+						<div class="section-primary col-sm-6">Email 7 days a week</div>
+						<div class="col-sm-4">M-F business hours <strong>only</strong></div>
+					</div>
+					
+					
+<!-- 						<table class="table table-striped table-hover">
 							<thead>
 								<tr>
 									<td class="feature-label"></td>
-									<td class="section-primary">KB GeoRisk</td>
+									<td class="section-primary">KB Geo</td>
 									<td>Competitors</td>
 								</tr>
 							</thead>
@@ -187,16 +214,17 @@
 									<td>Schema-less XML</td>
 								</tr>
 							</tbody>
-						</table>
-						
-						<h3 id="documentation" class="center" style="color: white">KB GeoRisk has <a href="http://docs.kbgeo.com">great developer documentation</a> for easier and faster integration!</h3>
+						</table> -->
+					</div>
+					<div class="row">
+						<h3 id="documentation" class="center" style="color: white"><a href="http://docs.kbgeo.com">Great developer documentation</a> for faster REST web service integration!</h3>
 					</div>
                 </div> 
             </div> 
         </div>
     </section><!--/#comparison-->
 	
-	<div class="big-gap"></div>
+	<div class="gap"></div>
     <section id="about" class="center">
 		<div class="container">
             <div class="box">
@@ -205,69 +233,199 @@
                 </div><!--/.center-->   
                 <div class="row">
                     <div class="col-md-12">
-						KB GeoRisk's mission is to provide fair-cost data services for insurance risk. We believe insurance risk can be informed by highly-accurate data without unreasonable cost. KB GeoRisk provides an up-to-date technology infrastructure you can rely on.
+						KB Geo's mission is to provide quality data services for insurance risk. We believe insurance risk information should be easily accessible and informed by highly-accurate data. KB Geo provides an up-to-date, fast, and secure technology infrastructure you can rely on.
                     </div><!--/.col-md-12-->
                 </div>
             </div> 
         </div>
 	</section>
 	
-	<div class="big-gap"></div>
+	<div class="gap"></div>
     <section id="contact">
         <div class="container">
             <div class="box last">
                 <div class="row">
-                    <!-- <div class="col-sm-6">
-                        <h1>Contact Form</h1>
-                        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+                    <div class="col-xs-12 col-md-6">
+                        <h1>Contact Us</h1>
                         <div class="status alert alert-success" style="display: none"></div>
                         <form id="main-contact-form" class="contact-form" name="contact-form" method="post" role="form">
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <input id="emailName" type="text" class="form-control" required="required" placeholder="Name">
+                                        <input id="contactName" type="text" class="form-control" required="required" placeholder="Name">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <input id="emailAddress" type="text" class="form-control" required="required" placeholder="Email address">
+                                        <input id="contactCompany" type="text" class="form-control" placeholder="Company">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input id="contactEmail" type="text" class="form-control" required="required" placeholder="Email address">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input id="contactPhone" type="text" class="form-control" placeholder="Phone">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input id="contactFreeTrialKey" type="checkbox"/> Send me a free trial key
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <textarea name="message" id="message" required="required" class="form-control" rows="8" placeholder="Message"></textarea>
+                                        <textarea name="message" id="contactMessage" required="required" class="form-control" rows="8" placeholder="Message"></textarea>
                                     </div>
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-danger btn-lg">Send Message</button>
+                                        <button id="contactUsSubmit" type="submit" class="btn btn-success btn-lg">Send Message</button>
                                     </div>
                                 </div>
                             </div>
                         </form>
-                    </div> --><!--/.col-sm-6-->
-                    <div class="col-sm-12" style="text-align: center">
+                    </div>
+                    <div class="hidden-xs hidden-sm col-md-6" style="position: absolute;top: 125px;right: -155px;">
+                    	<img src="img/kbgeo-location.png" alt="KB Geo" class="hidden-xs hidden-sm" style="border: 2px solid darkgray"/>
+                    	<p>Headquartered in Madison, WI</p>
+                    </div>
+                </div><!--/.row-->
+                <div class="row">
+                	<div class="col-sm-12" style="text-align: center">
                         <h1>Email Us</h1>
                         <div class="row">
                             <div class="col-md-12">
                                 <address>
-                                    <span><img src="img/kbgeo-logo.png" alt="KB Geo logo"/> <h3 class="kb-logo-text">KB <span class="color2">Geo</span>Risk</h3></span>
-                                    <h4><a href="mailto:info@kbgeo.com" style="color: white">info@kbgeo.com</a></h4>
+                                    <span><img src="img/kbgeo-logo.png" alt="KB Geo logo"/></span>
+                                    <h4><a href="mailto:sales@kbgeo.com" style="color: white">sales@kbgeo.com</a></h4>
                                 </address>
                             </div>
                         </div>
                     </div><!--/.col-sm-6-->
-                </div><!--/.row-->
+                </div>
             </div><!--/.box-->
         </div><!--/.container-->
     </section><!--/#contact-->
-
+    
+    <div class="big-gap"></div>
+	<section id="faq">
+		<div class="container">
+            <div class="box">
+                <div class="center">
+                    <h1>Frequently Asked Questions</h1>
+                </div><!--/.center-->   
+                <div class="row">
+                	<div class="col-md-12 col-lg-6">
+	                    <div class="question">
+							Q: Who uses Distance to Coast calculations?
+							<div class="answer">
+								Distance to Coast and Distance to Shoreline are widely used in the insurance risk business. Property insurance underwriters use DTC to determine how likely a property near a coastal shore is to sustain storm damage. Typically properties less than 100 miles inland are considered a risk, with those closest to the water assigned the highest risk level.
+							</div>
+	                    </div>
+	                    <div class=" question">
+							Q: How does KB Geo provide such high accuracy?
+							<div class="answer">
+								To get high-accuracy distance to coast, the coastline definition must be accurate. KB Geo derives a standard CONUS coastline definition from sources like NOAA, then processes the entire dataset through custom geopoint error-checking and refinement algorithms. Every time a customer requests Distance to Coast for a point in the United States, more purpose-built algorithms are executed to determine the nearest possible point on the defined coastline. The output of this process is available through our REST web service.
+							</div>
+	                    </div>
+	                    <div class="question">
+							Q: What makes KB Geo faster than other Distance to Coast services?
+							<div class="answer">
+								KB Geo has invested in advanced software that breaks down the Distance to Coast problem into much smaller problems that are then solved with the fastest available algorithms. Data caching and grooming keeps KB Geo Distance to Coast REST web service results fast and reliable.
+							</div>
+	                    </div>
+	                    <div class="question">
+							Q: What if my IT department has trouble using the KB Geo Distance to Coast REST web service?
+							<div class="answer">
+								KB Geo provides clear, comprehensive, understandable documentation with example code. We have software developers on staff to provide integration support if needed as well.
+							</div>
+	                    </div>
+                    </div>
+                    <div class="col-md-12 col-lg-6">
+                    	<div class="question">
+							Q: How can I use the KB Geo Distance to Coast REST web service with my own coastline definition?
+							<div class="answer">
+								<p>A: KB Geo can import your custom coastline as a set of latitude and longitude pairs and run all of its performance-improving indexing and reduction algorithms against your data. When your systems request Distance to Coast, the results will return distance to the closest point on your custom coastline. This process can be included in your monthly cost.</p>
+								<p>KB Geo also provides geospatial plotting services if you don't already have a coastline defined. <a href="#contact">Contact us</a> for more information!</p>
+							</div>
+	                    </div>
+	                    <div class="question">
+							Q: Why is KB Geo the best choice among competing distance to shoreline providers?
+							<div class="answer">
+								<p>KB Geo's coastline model is highly accurate, high-performance, secure, and covers the ENTIRE continental US. Other providers have inaccurate coastlines, long delays on each service call, and state-sized holes in their coverage.</p>
+								<p>If you currently wait 1 1/2 minutes for your DTC provider's web service results, KB Geo will save the average underwriter 124 hours (3 work weeks!) every year - and cost less as well. <a href="#contact">Contact us</a> to get started!</p>
+								<div>
+									<p>We're so sure KB Geo Distance to Coast is your best choice that we'll even help you try out our competitors:</p>
+									<ul>
+										<li><a href="https://riskmeter.com/sl_resources.htm" target="_new" title="Open RiskMeter Distance to Coast in a new window">RiskMeter Distance to Coast</a></li>
+										<li><a href="http://www.hazardhub.com/distance-to-coast" target="_new" title="Open HazardHub Distance to Coast in a new window">HazardHub Distance to Coast</a></li>
+										<li><a href="http://www.maprisk.com" target="_new" title="Open MapRisk in a new window">MapRisk</a></li>
+									</ul>
+								</div>
+							</div>
+	                    </div>
+	                    <div class="question">
+							Q: How can I get in touch if I'm having problems with KB Geo Distance to Coast?
+							<div class="answer">
+								KB Geo provides responsive customer support by email 7 days a week. You can also <a href="#contact">contact us</a> through this website.
+							</div>
+	                    </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+	</section>
+	
+	<div class="gap"></div>
+	<section id="other-services">
+		<div class="container">
+            <div class="box">
+                <div class="center">
+                    <h1>Other Services</h1>
+                </div><!--/.center-->   
+                <div class="row">
+                	<div class="col-sm-12 center">
+                		<h4>KB Geo provides software services in addition to fast, secure, inexpensive Distance to Coast.</h4> 
+                	</div>
+                	<div class="col-md-12 col-lg-6">
+	                    <div class="question">
+							Custom Coastline Definition
+							<div class="answer">
+								<p>KB Geo has built tools, infrastructure, and experience to make geospatial plotting quick and accurate. We can create an ordered custom latitude/longitude boundary set for anything - not just coastlines.</p>
+								<p>Customers have provided us with source documents such as hand-drawn maps, PDFs, county names, and descriptions like "1 mile south of the Hwy 73 bridge". We do the legwork to define a highly accurate set of latitude and longitude points.</p>
+								<p>If you have an existing set of coordinates that needs refinement, <a href="#contact">contact us</a>! We can import your coordinates into our tools and make the changes you need.</p>   
+							</div>
+	                    </div>
+	                    <div class=" question">
+							Custom Software Development
+							<div class="answer">
+								KB Geo has years of experience working with insurance companies to provide high-quality custom software. <a href="#contact">Contact us</a> for an estimate!
+							</div>
+	                    </div>
+                    </div>
+                    <div class="col-md-12 col-lg-6">
+                    	<div class="question">
+							Automatic Guidelines Service
+							<div class="answer">
+								<p>All insurance companies have a set of underwriting guidelines that drive premiums and determine whether an applicant can be insured. KB Geo has built a platform that allows your underwriters to enter the applicant's address and see all of your company's guidelines applicable to the applicant.</p>
+								<p>These guidelines can be further augmented with data integrations to make decisions based on distance to coast, credit rating, address county/state/zip/FIPS code, and many other possibilities.</p>
+								<p>Automatic Guidelines functionality is customizable and available as a custom web site or as a web service that integrates with your existing systems. <a href="#contact">Contact us</a> for more information!</p>  
+							</div>
+	                    </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+	</section>
+	
     <footer id="footer">
         <div class="container">
             <div class="row">
-                <div class="col-sm-6">
-                </div>
-                <div class="col-sm-6">
+                <div class="col-sm-12 center">
+                	<span>Copyright 2008 - <span id="copyrightEndDate">2017</span> KBS Systems LLC</span>
                 </div>
             </div>
         </div>
@@ -276,5 +434,56 @@
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
-</body>
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106137563-1"></script>
+    <script>
+      $("#copyrightEndDate").text(new Date().getFullYear());
+    	
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-106137563-1');
+	</script>
+	
+<script type="application/ld+json">
+	{
+  		"@context": "http://schema.org",
+  		"@type": "Organization",
+  		"url": "http://www.kbgeo.com",
+  		"logo": "http://www.kbgeo.com/img/kbgeo-logo-blue.png",
+  		"contactPoint": [{
+    		"@type": "ContactPoint",
+    		"telephone": "+1-608-616-0041",
+    		"contactType": "sales",
+			"areaServed": "US",
+			"availableLanguage": "English"
+  		}]
+	}
+</script>
+	
+	<script type="application/ld+json">
+{
+  "@context": "http://schema.org/",
+  "@type": "Product",
+  "name": "Distance to Coast REST API",
+  "brand": "KB Geo"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebApplication",
+  "name": "Distance to Coast",
+  "operatingSystem": "Windows, Mac, Linux",
+  "applicationCategory": "BusinessApplication",
+  "applicationSubCategory": "Web Service API",
+  "featureList": "Distance to Coast calculation",
+  "about": "KB Geo Distance to Coast is a fast, secure, and inexpensive RESTful web service API for retrieving the distance an address or lat/long and the nearest point on the coastline.",
+  "copyrightHolder": "KBS Systems LLC",
+  "copyrightYear": "2013",
+  "url": "http://www.kbgeo.com"
+}
+</script>
+	
 </html>

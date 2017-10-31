@@ -4,8 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +18,7 @@ import com.kbs.geo.http.security.KbConsoleUserContext;
 
 @RestController
 public class ClientStatisticsController {
-	private static final Logger LOG = LoggerFactory.getLogger(ClientStatisticsController.class);
+	private static final Logger LOG = Logger.getLogger(ClientStatisticsController.class);
 	
 	@Autowired
 	private KbConsoleUserContext kbContext;
@@ -29,7 +28,7 @@ public class ClientStatisticsController {
 	
 	@RequestMapping(value="console/statistics", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody List<ClientStatistics> getCurrentStatistics (HttpServletResponse response) {
-		LOG.info("GET /console/statistics for user {}", kbContext.getClientAuthWeb().getUsername());
+		LOG.info(String.format("GET /console/statistics for user %s", kbContext.getClientAuthWeb().getUsername()));
 		List<ClientStatistics> clientStatistics = clientStatisticsService.getByClientId(kbContext.getClientAuthWeb().getClientAuth().getClientId());
 		return clientStatistics;
     }

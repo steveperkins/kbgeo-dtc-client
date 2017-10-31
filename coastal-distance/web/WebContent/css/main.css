@@ -141,7 +141,8 @@ a:focus {
 #contact .box input[type="text"],
 #contact .box input[type="email"],
 #contact .box textarea {
-  background-color: #111;
+	background-color: #FFF;
+	color: #000;
   border: 0;
   -webkit-transition: 300ms;
   -moz-transition: 300ms;
@@ -151,11 +152,18 @@ a:focus {
 #contact .box input[type="text"]:focus,
 #contact .box input[type="email"]:focus,
 #contact .box textarea:focus {
-  background-color: #000;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
 }
+
+#contact .box input[type="text"].has-error,
+#contact .box input[type="email"].has-error,
+#contact .box textarea.has-error {
+	background-color: #c9302c;
+	color: #FFF;
+}
+
 .box {
   padding: 50px 30px;
   background: #fff;

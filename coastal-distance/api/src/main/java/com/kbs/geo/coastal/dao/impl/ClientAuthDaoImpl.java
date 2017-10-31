@@ -63,15 +63,10 @@ public class ClientAuthDaoImpl extends AbstractDao<ClientAuth> implements Client
 	@Override
 	protected int[] getInsertParamTypes() {
 		return new int[] { 
-				Types.BIGINT, // id
-				Types.VARCHAR, // source IP
-				Types.VARCHAR, // request URL
-				Types.NVARCHAR, // request body
-				Types.INTEGER, // request type
-				Types.INTEGER, // response status
-				Types.NVARCHAR, // response body
-				Types.DATE, // request time
-				Types.DATE, // response time
+				Types.BIGINT, // client id
+				Types.VARCHAR, // name
+				Types.VARCHAR, // token
+				Types.DATE, // expiration
 				Types.DATE, // created date
 				Types.DATE // updated date
 		};
@@ -80,17 +75,13 @@ public class ClientAuthDaoImpl extends AbstractDao<ClientAuth> implements Client
 	@Override
 	protected int[] getUpdateParamTypes() {
 		return new int[] { 
-				Types.BIGINT, // id
-				Types.VARCHAR, // source IP
-				Types.VARCHAR, // request URL
-				Types.NVARCHAR, // request body
-				Types.INTEGER, // request type
-				Types.INTEGER, // response status
-				Types.NVARCHAR, // response body
-				Types.DATE, // request time
-				Types.DATE, // response time
+				Types.BIGINT, // client id
+				Types.VARCHAR, // name
+				Types.VARCHAR, // token
+				Types.DATE, // expiration
+				Types.DATE, // created date
 				Types.DATE, // updated date
-				Types.BIGINT // client ID
+				Types.BIGINT // ID
 		};
 	}
 	

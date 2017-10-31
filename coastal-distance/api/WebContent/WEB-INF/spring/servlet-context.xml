@@ -56,6 +56,10 @@
     <bean id="clientAuthWeb" class="com.kbs.geo.coastal.model.billing.ClientAuthWeb"/>
      
     <!-- application.properties properties are pulled in here so they can be injected with @Resource -->
+    <bean id="application.version" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${application.version}"/>
+    </bean>
+    
     <bean id="apiGoogleMapsKey" class="java.lang.String">
     	<constructor-arg type="java.lang.String" value="${api.maps.google.key}"/>
     </bean>
