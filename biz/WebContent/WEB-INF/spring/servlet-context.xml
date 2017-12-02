@@ -7,12 +7,12 @@
     xmlns:task="http://www.springframework.org/schema/task"
     xmlns:security="http://www.springframework.org/schema/security"
     xsi:schemaLocation="
-        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
-        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
-        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
+        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security4.2.xsd">
  
     <!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
  	<util:properties id="propertyConfigurer" location="classpath:application.properties"/>
@@ -49,8 +49,22 @@
         <property name="password" value="${db.password}" />
     </bean>
     
+    <bean id="apiDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${db.api.driver}" />
+        <property name="url" value="${db.api.url}" />
+        <property name="username" value="${db.api.user}" />
+        <property name="password" value="${db.api.password}" />
+    </bean>
+    
     <bean id="restTemplate" class="org.springframework.web.client.RestTemplate"></bean>
 
+	<!-- OHHHHH I HATE CORS -->
+	<mvc:cors>
+	    <mvc:mapping path="/**"
+	        allowed-origins="*"
+	        allowed-headers="Content-Type, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Authorization, X-Requested-With, requestId, Correlation-Id, kb-auth-token"
+	        allowed-methods="GET, PUT, POST, DELETE, OPTIONS"/>
+	</mvc:cors>
 
     <!-- Security filters referenced by web.xml -->
     <!-- application.properties properties are pulled in here so they can be injected with @Resource -->
@@ -112,11 +126,5 @@
     </bean>
     <bean id="mailSparkpostUrl" class="java.lang.String">
     	<constructor-arg type="java.lang.String" value="${mail.sparkpost.url.base}"/>
-    </bean>
-    <bean id="trialkey.url" class="java.lang.String">
-    	<constructor-arg type="java.lang.String" value="${trialkey.url}"/>
-    </bean>
-    <bean id="trialkey.authtoken" class="java.lang.String">
-    	<constructor-arg type="java.lang.String" value="${trialkey.authtoken}"/>
     </bean>
 </beans>

@@ -48,7 +48,8 @@ jQuery(function($) {
 		$.ajax({
 			type: 'POST',
 			url: 'http://biz.kbgeo.com/contact-us',
-			headers: { "Referer": "kbgeo.com", "kb-auth-token": "gaA34o32" },
+			//url: 'http://localhost:8080/biz/contact-us',
+			//headers: { "kb-auth-token": "gaA34o32" },
 			data: JSON.stringify({
 					name: contactName,
 					company: contactCompany,

@@ -3,6 +3,7 @@ package com.kbs.geo.coastal.http.interceptor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -62,7 +63,7 @@ public class ApiSecurityService {
 	public ClientAuth authenticateRequest(String authToken, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException, ServletException, InvalidSecurityTokenException {
 		if(StringUtils.isBlank(authToken)) {
 			// No token provided
-			KbsRestException ex = new InvalidSecurityTokenException();
+			KbsRestException ex = new MissingSecurityTokenException();
 			recordError(null, ex, httpServletRequest, httpServletResponse);
 			throw ex;
 		}
@@ -71,7 +72,7 @@ public class ApiSecurityService {
 		ClientAuth clientAuth = clientAuthService.getByToken(authToken);
 		// Token provided but does not exist in our database
 		if(null == clientAuth || null == clientAuth.getClientId()) {
-			KbsRestException ex = new MissingSecurityTokenException();
+			KbsRestException ex = new InvalidSecurityTokenException();
 			recordError(null, ex, httpServletRequest, httpServletResponse);
 			throw ex;
 		}
@@ -171,11 +172,16 @@ public class ApiSecurityService {
 		
 		// -1 == no limit
 		if(validContract.getMaxRequests() > -1) {
-			Long currentRequestCount = clientRequestService.getRequestCount(clientId, RequestType.DISTANCE_TO_COAST);
+			Calendar cal = Calendar.getInstance();
+			Date today = cal.getTime();
+			// First of the month
+			cal.set(Calendar.DATE, 1);
+			
+			Long currentRequestCount = clientRequestService.getRequestCount(clientId, cal.getTime(), today, RequestType.DISTANCE_TO_COAST);
 			if(currentRequestCount >= validContract.getMaxRequests()) {
 				KbsRestException ex = new RequestLimitReachedException();
 				recordError(null, ex, httpServletRequest, httpServletResponse);
-				LOG.error("Client " + clientId + " is over limit: " + currentRequestCount + " of " + validContract.getMaxRequests() + " successful requests have been received", ex);	
+				LOG.error("Client " + clientId + " is over limit: " + currentRequestCount + " of " + validContract.getMaxRequests() + " successful requests have been received this month", ex);	
 			}
 		}
 		return clientAuth;

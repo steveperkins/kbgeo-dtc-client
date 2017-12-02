@@ -5,6 +5,7 @@ import java.sql.Types;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -16,7 +17,9 @@ import com.kbs.biz.model.ContactUs;
 public class ContactUsDao {
 	
 	private static final String INSERT_SQL = "INSERT INTO contact_us(name, company, email, phone, message) VALUES(?, ?, ?, ?, ?)";
+	
 	@Autowired
+	@Qualifier("dataSource")
 	private DataSource datasource;
 	
 	private PreparedStatementCreatorFactory insertStatementFactory;

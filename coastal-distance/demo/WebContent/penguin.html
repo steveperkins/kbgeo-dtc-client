@@ -18,6 +18,22 @@
 	
 	<link href="css/kbgeo.css" rel="stylesheet">
 	
+	<style>
+		.map-label {
+			color: black;
+			background-color: white;
+			font-size: 12px;
+			font-weight: bold;
+			text-align: center;
+			width: 150px;
+			border: 1px solid #464646;
+			white-space: nowrap;
+			
+			-webkit-border-radius: 2px 0px 2px 0px;
+			-moz-border-radius: 2px 0px 2px 0px;
+			border-radius: 2px 0px 2px 0px;
+		}
+	</style>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -38,46 +54,38 @@
                 </li>
 			</ul>
 			
-			
-            <ul class="nav nav-tabs" role="tablist">
-			    <li role="presentation" class="active"><a href="#latlng" aria-controls="latlng" role="tab" data-toggle="tab">Lat/Lng</a></li>
-			    <li role="presentation"><a href="#addressTab" aria-controls="addressTab" role="tab" data-toggle="tab">Address</a></li>
-			  </ul>
-			
-			  <!-- Tab panes -->
-			  <div class="tab-content">
-			    <div role="tabpanel" class="tab-pane active" id="latlng">
-			    	<div class="form">
-					  <div class="form-group">
-						<label for="lat">Lat:</label>
-						<input type="text" class="form-control" id="lat" placeholder="Latitude" value="39.768403" onkeydown="return validateLatIncremental(event);">
-					  </div>
-					  <div class="form-group">
-						<label for="lng">Lon:</label>
-						<input type="text" class="form-control" id="lng" placeholder="Longitude" value="-86.158068" onkeydown="return validateLngIncremental(event);">
-					  </div>
-					  <button id="go" type="button" class="btn btn-primary center-block" onclick="latlngFormSubmit();return">Go!</button>
+
+		    <div role="tabpanel" class="tab-pane active" id="addressTab" style="margin-top: 100px">
+		    	<div class="form">
+				  <div class="form-group">
+					<label for="address">Addresses:</label>
+					<textarea class="form-control" id="address" rows="10"></textarea>
 				  </div>
-				</div>
-			    <div role="tabpanel" class="tab-pane" id="addressTab">
-			    	<div class="form">
-					  <div class="form-group">
-						<label for="address">Address:</label>
-						<input type="text" class="form-control" id="address" placeholder="Full address" value="">
-					  </div>
-					  <button id="address-go" type="button" class="btn btn-primary center-block" onclick="addressFormSubmit();return">Go!</button>
-				  </div>
-			    </div>
-			    <div style="text-align: center">
-			    	<span id="errorMessage"></span>
-			    </div>
+				  <button id="address-go" type="button" class="btn btn-primary center-block" onclick="addressFormSubmit();return">Go!</button>
 			  </div>
+		    </div>
+		    <div style="text-align: center">
+		    	<span id="errorMessage"></span>
+		    </div>
+		    
 			<div id="stats">
 				<span class="responseTime"></span>
 			</div>
-			<div id="freeTrial" style="text-align: center;">
-				<a href="http://www.kbgeo.com/#contact" style="color: #00ff00">Get your free trial key now!</a>
+			
+			<div id="freeTrial">
+				<a href="http://www.kbgeo.com/#contact">Get your free trial key now!</a>
 			</div>
+			
+			<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+			<ins class="adsbygoogle"
+				 style="display:block"
+				 data-ad-client="ca-pub-7895580917389214"
+				 data-ad-slot="8585174130"
+				 data-ad-format="auto"></ins>
+			<script>
+			(adsbygoogle = window.adsbygoogle || []).push({});
+			</script>
+				
             <div id="footer">
             	KB GeoRisk provides <strong>blazing-fast</strong>, <strong>highly-accurate</strong>, <strong>low-cost</strong> distance to coast calculation for insurance risk and other industries.
             	<div style="margin-top: 20px">
@@ -92,10 +100,8 @@
         <div id="page-content-wrapper">
 		<div id="mainMap" class="full-map"></div>
         </div>
-        <!-- /#page-content-wrapper -->
 
     </div>
-    <!-- /#wrapper -->
 
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
@@ -107,7 +113,7 @@
     <script src="js/markerwithlabel.js"></script>
 	
 	<script src="js/validator.js"></script>
-	<script src="js/maps.js"></script>
+	<script src="js/maps-penguin.js"></script>
 	
     <!-- Menu Toggle Script -->
     <script>
@@ -165,66 +171,6 @@
 		clearError();
 	}
 	
-	// Validates input and returns lat/lng object
-	function latLngFormValidateAndParse() {
-		resetLatLngValidity();
-		var returnObj = null;
-		
-		var hasError = false;
-		var latControl = $("#lat");
-		var lat = latControl.val();
-		if(!validateLat(lat)) {
-			hasError = true;
-			markInvalid(latControl);
-		}
-		
-		var lngControl = $("#lng");
-		var lng = lngControl.val();
-		if(!validateLng(lng)) {
-			hasError = true;
-			markInvalid(lngControl);
-		}
-		
-		if(hasError) {
-			return null;
-		} else {
-			return {lat: +lat, lng: +lng};
-		}
-	}
-	function latlngFormSubmit() {
-		originPoint = latLngFormValidateAndParse();
-		if(null == originPoint) return;		
-		
-		// Throw an ajax call to get the nearest coastal point and distance, then add marker for coastal point and set label for both points to distance in miles
-		markRequestSendTime();
-		$.ajax({
-			type: 'GET',
-			url: ROOT + "/coastal-distance/v1/coord?lat=" + originPoint.lat + "&lng=" + originPoint.lng,
-			headers: {
-				"kb-auth-token": authToken
-			},
-			contentType: 'text/plain'
-		}).error(function(jqXHR, textStatus, errorThrown) {
-			console.error("Could not get coastal distance: " + errorThrown);
-			if(jqXHR.responseJSON && jqXHR.responseJSON.error) {
-				console.error(jqXHR.responseJSON.error);
-				showError(jqXHR.responseJSON.error);
-				return;
-			}
-		}).done(function(data) {
-			// console.log(data);
-			markResponseReceivedTime();
-			showStats();
-			
-			createOriginPointMarker(map, originPoint, data.distanceInMiles);
-			coastalPoint = data.coastlinePoint;
-			createCoastalPointMarker(map, coastalPoint);
-			
-			drawLineBetween(originPoint, coastalPoint, map);
-		});
-	}
-	
-	
 	// Validates input and returns address string
 	function addressFormValidateAndParse() {
 		resetAddressValidity();
@@ -241,19 +187,34 @@
 		if(hasError) {
 			return null;
 		} else {
-			return address;
+			var citiesAndStates = address.split("\n");
+			
+			var finalResult = [];
+			var i = 0;
+			for(i; i < citiesAndStates.length; i++) {
+				// Split again to get city distinct from state
+				var splittoon = citiesAndStates[i].split(", ");
+				finalResult.push({ city: splittoon[0], state: splittoon[1] });
+			}
+			return finalResult;
 		}
 	}
 	function addressFormSubmit() {
-		var address = addressFormValidateAndParse();
+		var citiesAndStates = addressFormValidateAndParse();
 		
 		if(null == address) return;		
 		
-		// Throw an ajax call to geolocate and get the nearest coastal point and distance
-		markRequestSendTime();
+		for(var i = 0; i < citiesAndStates.length; i++) {
+			// Throw an ajax call to geolocate and get the nearest coastal point and distance
+			dropMarker(citiesAndStates[i]);
+			
+		}
+	}
+	
+	function dropMarker(cityState) {
 		$.ajax({
 			type: 'GET',
-			url: ROOT + "/coastal-distance/v1/address?address=" + address,
+			url: ROOT + "/coastal-distance/v1/address?address=" + cityState.city + ", " + cityState.state,
 			headers: {
 				"kb-auth-token": authToken
 			},
@@ -266,22 +227,17 @@
 				return;
 			}
 		}).done(function(data) { 
-			// console.log(data);
-			markResponseReceivedTime();
-			showStats();
-			
 			if(data.error) {
 				showError(data.error);
 				return;
 			}
 			
-			createOriginPointMarker(map, data.targetPoint, data.distanceInMiles);
+			createOriginPointMarker(map, data.targetPoint, data.distanceInMiles, cityState);
 			createCoastalPointMarker(map, data.coastlinePoint);
 			
 			drawLineBetween(data.targetPoint, data.coastlinePoint, map);
 		});
 	}
-	
 	function round(num) {
 		return Math.round(num * 100) / 100;
 	}

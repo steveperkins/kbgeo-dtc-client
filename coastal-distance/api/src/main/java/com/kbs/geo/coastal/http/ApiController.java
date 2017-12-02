@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -63,7 +64,7 @@ public class ApiController {
     }
 	
 	@RequestMapping(value="/trialkey", method=RequestMethod.POST)
-	public @ResponseBody String createTrialKey(HttpServletRequest request, ContactUs contactUs) {
+	public @ResponseBody String createTrialKey(HttpServletRequest request, @RequestBody ContactUs contactUs) {
 		if(StringUtils.isBlank(localIpAddress)) {
 			throw new IpNotAuthorizedException();
 		}
