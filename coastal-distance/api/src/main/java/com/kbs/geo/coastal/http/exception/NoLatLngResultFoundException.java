@@ -3,12 +3,12 @@ package com.kbs.geo.coastal.http.exception;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.http.HttpStatus;
 
-@ResponseStatus(value=HttpStatus.NOT_FOUND, reason="No match found")
+@ResponseStatus(value=HttpStatus.NOT_FOUND, reason=HttpErrors.NO_MATCH_FOUND)
 public class NoLatLngResultFoundException extends HttpNotFoundException {
 	private static final long serialVersionUID = 1L;
 
 	public NoLatLngResultFoundException() {
-		super();
+		super(HttpErrors.NO_MATCH_FOUND);
 	}
 
 	public NoLatLngResultFoundException(String arg0, Throwable arg1, boolean arg2,

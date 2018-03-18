@@ -39,7 +39,7 @@ public class FireStationDistanceController {
 	private LatLngValidator latLngValidator;
 	
 	@RequestMapping(value="v{version}/coord", method=RequestMethod.GET, produces={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public @ResponseBody DistanceToFireStationResult getByCoord(@PathVariable("version") Integer version, @RequestParam("lat") Double lat, @RequestParam("lng") Double lng) {
+    public @ResponseBody DistanceToFireStationResult getByCoord(@PathVariable("version") Integer version, @RequestParam(value = "lat", required = false) Double lat, @RequestParam(value = "lng", required = false) Double lng) {
 		if(null == lat || null == lng) throw new InvalidLatLngException("Both lat and lng must both be provided");
 		
 		LatLng latLng = new LatLng(new BigDecimal(lat), new BigDecimal(lng));

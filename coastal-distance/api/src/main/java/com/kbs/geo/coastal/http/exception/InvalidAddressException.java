@@ -3,12 +3,12 @@ package com.kbs.geo.coastal.http.exception;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.http.HttpStatus;
 
-@ResponseStatus(value=HttpStatus.BAD_REQUEST, reason="Invalid address")
+@ResponseStatus(value=HttpStatus.BAD_REQUEST, reason=HttpErrors.VALIDATION_INVALID_ADDRESS)
 public class InvalidAddressException extends HttpBadRequestException {
 	private static final long serialVersionUID = 1L;
 
 	public InvalidAddressException() {
-		super();
+		super(HttpErrors.VALIDATION_INVALID_ADDRESS);
 	}
 
 	public InvalidAddressException(String arg0, Throwable arg1, boolean arg2,

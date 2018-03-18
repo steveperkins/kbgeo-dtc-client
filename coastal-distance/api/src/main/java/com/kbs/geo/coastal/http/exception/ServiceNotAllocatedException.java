@@ -3,12 +3,12 @@ package com.kbs.geo.coastal.http.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = HttpErrors.SECURITY_TOKEN_MISSING_MESSAGE)
+@ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = HttpErrors.BILLING_SERVICE_NOT_ALLOCATED_MESSAGE)
 public class ServiceNotAllocatedException extends HttpUnauthorizedException {
 	private static final long serialVersionUID = 1L;
 
 	public ServiceNotAllocatedException() {
-		super();
+		super(HttpErrors.BILLING_SERVICE_NOT_ALLOCATED_MESSAGE);
 	}
 
 	public ServiceNotAllocatedException(String message, Throwable cause, boolean enableSuppression,

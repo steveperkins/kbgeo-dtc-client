@@ -1,11 +1,13 @@
 package com.kbs.geo.coastal.http.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
+@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Bad request")
 public class HttpBadRequestException extends KbsRestException {
 	private static final long serialVersionUID = 1L;
 	public HttpBadRequestException() {
-		super();
+		super("Bad request");
 	}
 
 	public HttpBadRequestException(String message, Throwable cause, boolean enableSuppression,

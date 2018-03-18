@@ -8,7 +8,7 @@ public class ExpiredCredentialsException extends HttpUnauthorizedException {
 	private static final long serialVersionUID = 1L;
 
 	public ExpiredCredentialsException() {
-		super();
+		super(HttpErrors.SECURITY_EXPIRED_CREDENTIALS_MESSAGE);
 	}
 
 	public ExpiredCredentialsException(String message, Throwable cause, boolean enableSuppression,

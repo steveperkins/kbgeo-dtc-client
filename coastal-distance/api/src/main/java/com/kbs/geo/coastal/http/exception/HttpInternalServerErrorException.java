@@ -1,8 +1,9 @@
 package com.kbs.geo.coastal.http.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-
+@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = HttpErrors.ERROR_UNKNOWN_MESSAGE)
 public class HttpInternalServerErrorException extends KbsRestException {
 	private static final long serialVersionUID = 1L;
 	public HttpInternalServerErrorException() {

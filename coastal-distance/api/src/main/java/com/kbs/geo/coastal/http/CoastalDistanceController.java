@@ -2,6 +2,7 @@ package com.kbs.geo.coastal.http;
 
 import java.math.BigDecimal;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kbs.geo.AccentStripper;
 import com.kbs.geo.coastal.http.exception.GeocodingException;
+import com.kbs.geo.coastal.http.exception.InvalidAddressException;
 import com.kbs.geo.coastal.http.exception.InvalidLatLngException;
 import com.kbs.geo.coastal.http.exception.NoLatLngResultFoundException;
 import com.kbs.geo.coastal.model.DistanceToCoastResult;
@@ -39,7 +41,7 @@ public class CoastalDistanceController {
 	private LatLngValidator latLngValidator;
 	
 	@RequestMapping(value="v{version}/coord", method=RequestMethod.GET, produces={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public @ResponseBody DistanceToCoastResult getByCoord(@PathVariable("version") Integer version, @RequestParam("lat") Double lat, @RequestParam("lng") Double lng) {
+    public @ResponseBody DistanceToCoastResult getByCoord(@PathVariable("version") Integer version, @RequestParam(value = "lat", required = false) Double lat, @RequestParam(value = "lng", required = false) Double lng) {
 		if(null == lat || null == lng) throw new InvalidLatLngException("Both lat and lng must both be provided");
 		
 		LatLng latLng = new LatLng(new BigDecimal(lat), new BigDecimal(lng));
@@ -51,7 +53,9 @@ public class CoastalDistanceController {
     }
 	
 	@RequestMapping(value="v{version}/address", method=RequestMethod.GET, produces={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public @ResponseBody DistanceToCoastResult getByAddress(@PathVariable("version") Integer version, @RequestParam("address") String address) {
+    public @ResponseBody DistanceToCoastResult getByAddress(@PathVariable("version") Integer version, @RequestParam(value = "address", required = false) String address) {
+		if(StringUtils.isBlank(address)) throw new InvalidAddressException("Address must be provided");
+		
 		// Strip out any invalid encoding
 		address = address.replaceAll(",", "").replaceAll("%2C", "").replaceAll("  ", " ").replaceAll("\\+\\+", "\\+");
 		

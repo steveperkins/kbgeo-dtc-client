@@ -8,7 +8,7 @@ public class RequestLimitReachedException extends HttpUnauthorizedException {
 	private static final long serialVersionUID = 1L;
 
 	public RequestLimitReachedException() {
-		super();
+		super(HttpErrors.BILLING_REQUEST_COUNT_EXCEEDED_MESSAGE);
 	}
 
 	public RequestLimitReachedException(String message, Throwable cause, boolean enableSuppression,

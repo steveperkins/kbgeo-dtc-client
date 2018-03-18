@@ -92,9 +92,9 @@ public class CreateUSGridPointsTertiaryController {
 					CoastlinePoint currentWinner = null;
 					Double minDistance = 99999999.0;
 					int z;
-					List<CoastlinePoint> coastlinePoints = coastlinePointService.getBetween(kbsClientId, minimumCoastlinePointId, maximumCoastlinePointId);
-					for(z = 0; z < coastlinePoints.size(); z++) {
-						CoastlinePoint coastlinePoint = coastlinePoints.get(z);
+					List<CoastlinePoint> fireDeptPoints = coastlinePointService.getBetween(kbsClientId, minimumCoastlinePointId, maximumCoastlinePointId);
+					for(z = 0; z < fireDeptPoints.size(); z++) {
+						CoastlinePoint coastlinePoint = fireDeptPoints.get(z);
 						LOG.info("Calculating DTC for gridPoint [" + gridPoint.getLat() + ", " + gridPoint.getLng() + "] coastline point [" + coastlinePoint.getLat() + ", " + coastlinePoint.getLng() + "]");
 						// Use Great Circle formula to calculate minimum distance to coast from the target point
 						Double milesBetween = coastlinePointService.getMilesBetween(newGridPointlatLng, coastlinePoint);

@@ -9,22 +9,20 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.kbs.geo.coastal.model.GridPoint;
+import com.kbs.geo.preprocess.GridPointCreationService;
+import com.kbs.geo.preprocess.PreProcessFireDeptService;
 
 //@RestController("admin")
 public class CreateUSGridPointsInitialController {
-
-	/**
-	 * @param args
-	 */
-/*	public static void main(String[] args) {
-		new CreateUSGridPointsInitialController().createGridPoints();
-	}*/
-	
 	private static final Logger LOG = Logger.getLogger(CreateUSGridPointsInitialController.class);
 	// Record only lat/lon within the continental US
 	private static final Double MAX_LATITUDE = 50.0;
@@ -61,6 +59,12 @@ public class CreateUSGridPointsInitialController {
 	@Autowired
 	private DataSource datasource;
 	
+	@Autowired
+	private GridPointCreationService gridPointService;
+	
+	@Autowired
+	private PreProcessFireDeptService preprocessService;
+	
 	List<GridPoint> gridPoints = Collections.synchronizedList(new ArrayList<GridPoint>());
 	Long pointCount = 0L;
 	Long recordCount = 0L;
@@ -69,7 +73,30 @@ public class CreateUSGridPointsInitialController {
 		SpringContextHolder.context = new ClassPathXmlApplicationContext("classpath:servlet-context.xml");
 		datasource = (DataSource)SpringContextHolder.context.getBean("dataSource");
 	}*/
-	String INSERT_GRID_POINT_SQL = "INSERT INTO grid_point_%s (lat, lon) VALUES(?, ?)";
+	private String INSERT_GRID_POINT_SQL = "";
+	
+//	@RequestMapping(value="createGridPointsFire", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public void createGridPointsFire() {
+		//gridPointService.createInitialGridPoints("fire", 4.830188679245283); // 256-mile increment
+//		gridPointService.createInitialGridPoints("fire", 1/0.26953125); // 128-mile increment
+//		preprocessService.process("fire", "fire"); // Because this is the first generation of grid points, the read and write tables are the same
+//		preprocessService.createIntermediaryGridPoints("fire", 10.0, 1/0.5390625); // 128-mile increment
+//		preprocessService.createIntermediaryGridPoints("fire", 8.0, 1/1.078125); // 64-mile increment
+//		preprocessService.createIntermediaryGridPoints("fire", 4.0, 1/2.15625); // 32-mile increment
+//		preprocessService.createIntermediaryGridPoints("fire", 2.0, 1/4.3125); // 16-mile increment
+//		preprocessService.createIntermediaryGridPoints("fire", 1.0, 1/8.265); // 8-mile increment
+//		preprocessService.createIntermediaryGridPoints("fire", 0.6, 1/16.53); // 4-mile increment
+//		preprocessService.createIntermediaryGridPoints("fire", 0.4, 1/33.06); // 2-mile increment (creates bounding boxes of 4 square miles)
+
+		preprocessService.findRootFireDepartmentAssociations("fire", 15.0, 1/0.5390625, "1.855072463768116");
+		preprocessService.findRootFireDepartmentAssociations("fire", 4.0, 1/1.078125, "0.927536231884058");
+		preprocessService.findRootFireDepartmentAssociations("fire", 2.0, 1/0.26953125, "0.463768115942029");
+		preprocessService.findRootFireDepartmentAssociations("fire", 2.0, 1/2.15625, "0.2318840579710145");
+		preprocessService.findRootFireDepartmentAssociations("fire", 2.0, 1/8.265, "0.12099213551119177");
+		preprocessService.findRootFireDepartmentAssociations("fire", 1.0, 1/16.53, "0.060496067755595885");
+		preprocessService.findRootFireDepartmentAssociations("fire", 1.0, 1/33.06, "0.0302480338777979");
+		
+	}
 	
 //	@RequestMapping(value="createGridPointsInitial/{table}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	public void createGridPoints(@PathVariable("table") Integer table, @RequestParam("increment") Double increment) {

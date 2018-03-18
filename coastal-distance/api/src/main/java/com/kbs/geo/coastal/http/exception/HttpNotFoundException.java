@@ -1,11 +1,13 @@
 package com.kbs.geo.coastal.http.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
+@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = HttpErrors.ERROR_NOT_FOUND)
 public class HttpNotFoundException extends KbsRestException {
 	private static final long serialVersionUID = 1L;
 	public HttpNotFoundException() {
-		super();
+		super(HttpErrors.ERROR_NOT_FOUND);
 	}
 
 	public HttpNotFoundException(String message, Throwable cause, boolean enableSuppression,

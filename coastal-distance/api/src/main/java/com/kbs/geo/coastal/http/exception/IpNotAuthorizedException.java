@@ -8,7 +8,7 @@ public class IpNotAuthorizedException extends HttpUnauthorizedException {
 	private static final long serialVersionUID = 1L;
 
 	public IpNotAuthorizedException() {
-		super();
+		super(HttpErrors.SECURITY_IP_INVALID_MESSAGE);
 	}
 
 	public IpNotAuthorizedException(String message, Throwable cause, boolean enableSuppression,

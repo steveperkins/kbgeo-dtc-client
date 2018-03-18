@@ -8,7 +8,7 @@ public class RefererNotAuthorizedException extends HttpUnauthorizedException {
 	private static final long serialVersionUID = 1L;
 
 	public RefererNotAuthorizedException() {
-		super();
+		super(HttpErrors.SECURITY_REFERER_INVALID_MESSAGE);
 	}
 
 	public RefererNotAuthorizedException(String message, Throwable cause, boolean enableSuppression,

@@ -1,12 +1,13 @@
 package com.kbs.geo.coastal.http.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-
+@ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = HttpErrors.ERROR_ACCESS_VIOLATION)
 public class HttpUnauthorizedException extends KbsRestException {
 	private static final long serialVersionUID = 1L;
 	public HttpUnauthorizedException() {
-		super();
+		super(HttpErrors.ERROR_ACCESS_VIOLATION);
 	}
 
 	public HttpUnauthorizedException(String message, Throwable cause, boolean enableSuppression,

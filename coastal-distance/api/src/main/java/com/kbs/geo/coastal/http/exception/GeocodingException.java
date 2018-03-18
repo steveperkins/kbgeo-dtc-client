@@ -8,7 +8,7 @@ public class GeocodingException extends HttpBadRequestException {
 	private static final long serialVersionUID = 1L;
 
 	public GeocodingException() {
-		super();
+		super("Address could not be geocoded");
 	}
 
 	public GeocodingException(String arg0, Throwable arg1, boolean arg2,
