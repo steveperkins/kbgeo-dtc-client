@@ -53,3 +53,5 @@ coastal-distance/demo/build
 creds.txt
 dump*.sql
 
+.recommenders/
+coastal-distance/web/build/
