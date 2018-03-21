@@ -4,7 +4,8 @@ public enum RequestType {
 	ERROR(1),
 	DISTANCE_TO_COAST(2),
 	// Requests to retrieve client console data
-	CONSOLE(3);
+	CONSOLE(3),
+	FIRE_STATION(4);
 	
 	private Integer id;
 	private RequestType(Integer id) {

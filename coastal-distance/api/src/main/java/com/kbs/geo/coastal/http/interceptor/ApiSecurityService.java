@@ -153,14 +153,20 @@ public class ApiSecurityService {
 		}
 					
 		LOG.info("Referer is OK");
-		
-		List<ClientContract> contractsMatchingRequestType = findContractsMatching(clientContracts, RequestType.DISTANCE_TO_COAST);
+		String path = httpServletRequest.getPathInfo();
+		RequestType requiredContract = null;
+		if(path.contains("coastal-distance")) {
+			requiredContract = RequestType.DISTANCE_TO_COAST;
+		} else if(path.contains("fire-station")) {
+			requiredContract = RequestType.FIRE_STATION;
+		}
+		List<ClientContract> contractsMatchingRequestType = findContractsMatching(clientContracts, requiredContract);
 		if(null == contractsMatchingRequestType || contractsMatchingRequestType.isEmpty()) {
 			KbsRestException ex = new ServiceNotAllocatedException();
 			recordError(null, ex, httpServletRequest, httpServletResponse);
 			throw ex;
 		}
-		LOG.info("Found client contracts matching the DISTANCE_TO_COAST");
+		LOG.info("Found client contracts matching " + requiredContract.name());
 		
 		ClientContract validContract = findValidContract(contractsMatchingRequestType);
 		if(null == validContract) {
@@ -177,7 +183,7 @@ public class ApiSecurityService {
 			// First of the month
 			cal.set(Calendar.DATE, 1);
 			
-			Long currentRequestCount = clientRequestService.getRequestCount(clientId, cal.getTime(), today, RequestType.DISTANCE_TO_COAST);
+			Long currentRequestCount = clientRequestService.getRequestCount(clientId, cal.getTime(), today, requiredContract);
 			if(currentRequestCount >= validContract.getMaxRequests()) {
 				KbsRestException ex = new RequestLimitReachedException();
 				recordError(null, ex, httpServletRequest, httpServletResponse);
@@ -188,9 +194,13 @@ public class ApiSecurityService {
 	}
 	
 	private List<ClientContract> findContractsMatching(List<ClientContract> contracts, RequestType requestType) {
-		// TODO When there are multiple possible request types, roll through the list of the client's contracts and return those applicable to this request type
+		// Roll through the list of the client's contracts and return those applicable to this request type
 		List<ClientContract> matchingContracts = new ArrayList<ClientContract>();
-		matchingContracts.add(contracts.get(0));
+		for(ClientContract contract: contracts) {
+			if(contract.getRequestType().equals(requestType)) {
+				matchingContracts.add(contract);
+			}
+		}
 		return matchingContracts;
 	}
 	

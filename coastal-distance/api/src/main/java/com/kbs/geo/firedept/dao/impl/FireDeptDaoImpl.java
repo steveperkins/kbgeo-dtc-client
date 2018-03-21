@@ -20,7 +20,7 @@ import com.kbs.geo.firedept.model.FireDepartment;
 public class FireDeptDaoImpl implements FireDeptDao {
 	private static final String SELECT_BY_ID_SQL = "SELECT * FROM fire_dept WHERE id=?";
 	private static final String GET_ALL_SQL = "SELECT * FROM fire_dept";
-	private static final String GET_FIRE_DEPTS_FROM_SURROUNDING_POINTS_SQL = "SELECT DISTINCT fd.* FROM grid_point_fire gp INNER JOIN fire_dept fd ON gp.fire_dept_id=fd.id WHERE gp.lat BETWEEN (? - 0.1) AND (? + 0.1) AND gp.lon BETWEEN (? - 0.1) AND (? + 0.1)";
+	private static final String GET_FIRE_DEPTS_FROM_SURROUNDING_POINTS_SQL = "SELECT DISTINCT fd.* FROM grid_point_fire gp INNER JOIN fire_dept fd ON gp.fire_dept_id=fd.id WHERE gp.lat BETWEEN (? - 0.05) AND (? + 0.05) AND gp.lon BETWEEN (? - 0.05) AND (? + 0.05)";
 	
 	@Autowired
 	private DataSource datasource;
