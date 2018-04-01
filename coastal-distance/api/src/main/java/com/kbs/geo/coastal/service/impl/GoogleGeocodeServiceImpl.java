@@ -28,7 +28,7 @@ public class GoogleGeocodeServiceImpl implements GeocodeService {
 		LOG.debug("Geocoding address {}", address);
 		
 		// Request geocoding for the given address
-		GeoApiContext context = new GeoApiContext().setApiKey(apiGoogleMapsKey);
+		GeoApiContext context = new GeoApiContext.Builder().apiKey(apiGoogleMapsKey).build();
 		try {
 			GeocodingResult[] results = GeocodingApi.geocode(context, address).await();
 			LOG.debug("Google geocoding returned for address {}", address);

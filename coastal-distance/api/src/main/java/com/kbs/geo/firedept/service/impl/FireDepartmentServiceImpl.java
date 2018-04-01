@@ -10,7 +10,9 @@ import com.kbs.geo.coastal.model.GeoCoordinate;
 import com.kbs.geo.coastal.model.LatLng;
 import com.kbs.geo.firedept.dao.FireDeptDao;
 import com.kbs.geo.firedept.model.DistanceToFireStationResult;
+import com.kbs.geo.firedept.model.DrivingDistanceResult;
 import com.kbs.geo.firedept.model.FireDepartment;
+import com.kbs.geo.firedept.service.DrivingDistanceService;
 import com.kbs.geo.firedept.service.FireDepartmentService;
 import com.kbs.geo.math.DistanceCalculatorUtil;
 
@@ -21,6 +23,9 @@ public class FireDepartmentServiceImpl implements FireDepartmentService {
 			
 	@Autowired
 	private FireDeptDao dao;
+	
+	@Autowired
+	private DrivingDistanceService drivingDistanceService;
 	
 	@Override
 	public DistanceToFireStationResult getNearestFireDept(GeoCoordinate targetPoint) {
@@ -40,6 +45,20 @@ public class FireDepartmentServiceImpl implements FireDepartmentService {
 		result.setDistanceInMiles(winningDistance);
 		result.setFireDepartment(winner);
 		result.setTargetPoint(targetPoint);
+		
+		if(null != winner) {
+			// Attempt to find driving distance between target point and fire station
+			try {
+				DrivingDistanceResult drivingDistance = drivingDistanceService.getDistanceBetween(new LatLng(winner.getLat(), winner.getLng()), targetPoint);
+				if(null != drivingDistance) {
+					result.setDrivingDistanceInMiles(drivingDistance.getDistanceMiles());
+					result.setDrivingDurationInSeconds(drivingDistance.getDurationSeconds());
+					result.setDrivingDurationInSecondsTrafficAdjusted(drivingDistance.getDurationAdjustedForTraffic());
+				}
+			} catch(Exception e) {
+				LOG.error("Could not find driving distance!", e);
+			}
+		}
 		return result;
 	}
 }

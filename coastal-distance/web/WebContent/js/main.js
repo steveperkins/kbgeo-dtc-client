@@ -44,11 +44,16 @@ jQuery(function($) {
 		var contactPhone = $("#contactPhone").val();
 		var contactCompany = $("#contactCompany").val();
 		var contactFreeTrialKey = document.getElementById("contactFreeTrialKey").checked;
+		var contractType = document.getElementById("contractType").value;
+		if(!contractType) {
+			contractType = "dtc";
+		}
+		
 		// Send the message
 		$.ajax({
 			type: 'POST',
 			url: 'http://biz.kbgeo.com/contact-us',
-			//url: 'http://localhost:8080/biz/contact-us',
+//			url: 'http://localhost:8080/biz/contact-us',
 			//headers: { "kb-auth-token": "gaA34o32" },
 			data: JSON.stringify({
 					name: contactName,
@@ -56,7 +61,8 @@ jQuery(function($) {
 					email: contactEmail,
 					phone: contactPhone,
 					message: contactMessage,
-					requestFreeTrial: contactFreeTrialKey
+					requestFreeTrial: contactFreeTrialKey,
+					contractType: contractType
 				}),
 			success: function(data) {
 				$("#main-contact-form").prev().text(data.message).fadeIn().delay(3000).fadeOut();

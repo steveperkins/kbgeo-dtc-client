@@ -32,17 +32,20 @@ function initMap(elementId, centerPoint) {
   return map;
 }
 
-function drawLineBetween(originPoint, coastalPoint, map) {
+function drawLineBetween(originPoint, targetPoint, map, color) {
+	if(!color) {
+		color = '#0084B8';
+	}
 	var lineSymbol = {
 	    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
 	};
 	
 	// Create the polyline and add the symbol via the 'icons' property.
 	var line = new google.maps.Polyline({
-		strokeColor: '#0084B8',
+		strokeColor: color,
 	    strokeOpacity: 0.7,
 	    strokeWeight: 2,
-	    path: [originPoint, coastalPoint],
+	    path: [originPoint, targetPoint],
 	    icons: [{
 	      icon: lineSymbol,
 	      // Draw arrow at end of line
@@ -50,6 +53,13 @@ function drawLineBetween(originPoint, coastalPoint, map) {
 	    }],
 	    map: map
 	  });
+	
+	var bounds = new google.maps.LatLngBounds();
+	bounds.extend(originPoint);
+	bounds.extend(targetPoint);
+	map.fitBounds(bounds);
+	map.setCenter(bounds.getCenter());
+//	map.setZoom(map.getZoom()-1); 
 }
 
 function createOriginPointMarker(map, originPoint, distanceInMiles) {
@@ -75,6 +85,20 @@ function createCoastalPointMarker(map, coastalPoint) {
 	    labelClass: "map-label map-label-coastal", // the CSS class for the label
 	    labelStyle: {opacity: 0.75},
 	    labelContent: roundToThreePlaces(coastalPoint.lat) + ", " + roundToThreePlaces(coastalPoint.lng)
+	});
+	return marker;
+}
+
+function createFireStationPointMarker(map, point, labelDescription) {
+	var marker = new MarkerWithLabel({
+		map: map,
+		position: point,
+		icon: "img/fire-truck-icon.png",
+		animation:google.maps.Animation.DROP,
+		labelAnchor: new google.maps.Point(55, 0),
+	    labelClass: "map-label map-label-fire", // the CSS class for the label
+	    labelStyle: {opacity: 0.75},
+	    labelContent: labelDescription
 	});
 	return marker;
 }

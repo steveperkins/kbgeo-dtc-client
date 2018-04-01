@@ -3,21 +3,22 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="KB Geo provides fast, accurate, inexpensive distance to coast/distance to shoreline/distance to water calculations for insurance risk and other industries as an easily-integrated web service">
-    <meta name="keywords" content="coast,shoreline,water,distance,distance to coast,coastal distance api,distance to shoreline,distance to sea,distance to water,distance from coast,distance from shoreline,distance from sea,calculator,calculate,tool,map,mapping,api,web service,rest,fast,secure,risk,risks,evaluate,geospatial,insurance,sea,ocean,water,property,distance,mga,wholesale,lloyds,hurricane,flood,wind,maprisk">
+    <meta name="description" content="KB Geo provides fast, accurate, easy distance to fire station calculations for insurance risk and other industries as an easily-integrated web service">
+    <meta name="keywords" content="hazard hub,melissa data,pitney bowes,fire station, fire department, driving distance to fire department, road miles to fire department, distance,distance to fire station,fire station api,distance to fire, distance from fire,web service,tool,map,mapping,api,rest,fast,secure,risk,risks,evaluate,geospatial,insurance,property fire,mga,wholesale,lloyds,hurricane,flood,wind,maprisk">
     <meta name="author" content="Steve Perkins, KB Geo">
     <meta property="og:locale" content="en_US">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Distance to Coast Web Service">
-    <meta property="og:url" content="http://www.kbgeo.com">
+    <meta property="og:title" content="Distance to Fire Station Service">
+    <meta property="og:url" content="http://www.kbgeo.com/fire.html">
     <meta property="og:site_name" content="KB Geo">
-    <title>KB Geo - Distance to Coast</title>
+    <title>KB Geo - Distance to Fire Station</title>
     <link rel="canonical" href="http://www.kbgeo.com">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/fa-solid.min.css" rel="stylesheet">
     <link href="css/prettyPhoto.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
-    <link href="css/kbgeo.css" rel="stylesheet">
+    <link href="css/fire.css" rel="stylesheet">
     
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
@@ -59,16 +60,24 @@
             <div class="item active">
                 <div class="container">
                     <div class="carousel-content">
-                        <h1>Distance to Coast <i>fast</i></h1>
-                        <p class="lead">Results in <strong>less than 2 seconds</strong></p>
+                        <h1>Get Nearest Fire Station <i>fast</i></h1>
+                        <p class="lead">Results in <strong>less than two seconds</strong></p>
                     </div>
                 </div>
             </div><!--/.item-->
             <div class="item">
                 <div class="container">
                     <div class="carousel-content">
-                        <h1>Hand-drawn coastlines</h1>
-                        <p class="lead">Every coordinate is <strong>verified by a human</strong></p>
+                        <h1>Over 27,000 fire stations</h1>
+                        <p class="lead">Volunteer, on-call, contracted, and full-time <strong>fire stations</strong></p>
+                    </div>
+                </div>
+            </div><!--/.item-->
+            <div class="item">
+                <div class="container">
+                    <div class="carousel-content">
+                        <h1>Full Report on Every Station</h1>
+                        <p class="lead"><strong>Driving distance</strong>, <strong>drive time</strong>, address, county, website, local/state/federal, lat/lon, <strong>and more!</strong></p>
                     </div>
                 </div>
             </div><!--/.item-->
@@ -76,7 +85,7 @@
                 <div class="container">
                     <div class="carousel-content">
                         <h1>Easy integration</h1>
-                        <p class="lead">Get distance to coast from <strong>lat/lon or address</strong></p>
+                        <p class="lead">Get distance to fire station from <strong>lat/lon or address</strong></p>
                     </div>
                 </div>
             </div><!--/.item-->
@@ -89,8 +98,6 @@
                 </div>
             </div><!--/.item-->
         </div><!--/.carousel-inner-->
-        <!-- <a class="prev" href="#main-slider" data-slide="prev"><i class="icon-angle-left"></i></a>
-        <a class="next" href="#main-slider" data-slide="next"><i class="icon-angle-right"></i></a> -->
 		<div class="free-trial">
 			<a href="#contact">
 				<span style="text-decoration:underline">Get your</span> <span style="color: #52B6EC">free trial key</span>!					
@@ -106,14 +113,14 @@
                         <div class="center">
                         	<i class="color2 fa fa-tachometer fa-5x"></i>
                             <h1>Fast.</h1>
-                            <p>Results in less than 2 <i>seconds</i>.</p>
+                            <p>Results in less than two <i>seconds</i>.</p>
                         </div>
                     </div><!--/.col-md-4-->
                     <div class="col-md-4 col-sm-6">
                         <div class="center">
                             <i class="color2 fa fa-map-pin fa-5x"></i>
                             <h1>Accurate.</h1>
-                            <p>Distance to Coast resolution down to <i>1 mile</i>.</p>
+                            <p>Over <i>2 million</i> measurements taken.</p>
                         </div>
                     </div><!--/.col-md-4-->
                     <div class="col-md-4 col-sm-6">
@@ -133,11 +140,11 @@
 		<div class="container">
             <div class="box">
                 <div class="center">
-                    <h1>Distance to Coast Web Service</h1>
+                    <h1>Nearest Fire Station Web Service</h1>
                 </div><!--/.center-->   
                 <div class="row">
                     <div class="col-md-12">
-						<a class="btn btn-default btn-lg" href="http://demo.kbgeo.com">Try it now for FREE!</a>
+						<a class="btn btn-default btn-lg" href="http://demo.kbgeo.com/fire.html">Try it now for FREE!</a>
                     </div><!--/.col-md-12-->
                 </div>
             </div> 
@@ -154,72 +161,29 @@
                 <div id="comparison-table">
                 	<div class="row">
 						<div class="feature-label col-sm-2"></div>
-						<div class="section-primary col-sm-6">KB Geo</div>
-						<div class="col-sm-4">Competitors</div>
+						<div class="section-primary col-sm-10">KB Geo Nearest Fire Station</div>
 					</div>
 					<div class="row">
 						<div class="feature-label col-sm-2"><i class="fa fa-motorcycle"></i> Speed</div>
-						<div class="section-primary col-sm-6">Under <strong>2 seconds</strong></div>
-						<div class="col-sm-4">45 seconds to <strong>2 minutes</strong></div>
+						<div class="section-primary col-sm-10">Less than <strong>2 seconds</strong></div>
 					</div>
 					<div class="row">
-						<div class="feature-label col-sm-2"><i class="fa fa-usd"></i> Pricing</div>
-						<div class="section-primary col-sm-6">Far less than competitors</div>
-						<div class="col-sm-4">More than <strong>$1.00/call</strong></div>
+						<div class="feature-label col-sm-2"><i class="fa fa-tachometer"></i> Data</div>
+						<div class="section-primary col-sm-10">Get <strong>driving distance</strong>, estimated <strong>drive time</strong>, government ID, name, address, county, website, local/state/federal, lat/lon, and # of employees broken down by classification</div>
 					</div>
 					<div class="row">
 						<div class="feature-label col-sm-2"><i class="fa fa-lock"></i> Security</div>
-						<div class="section-primary col-sm-6">Auth token, IP binding, domain binding, SSL Encryption</div>
-						<div class="col-sm-4">Plaintext password</strong> in URL</div>
+						<div class="section-primary col-sm-10">Auth token, IP binding, domain binding, SSL Encryption</div>
 					</div>
 					<div class="row">
 						<div class="feature-label col-sm-2"><i class="fa fa-phone"></i> Support</div>
-						<div class="section-primary col-sm-6">Email 7 days a week</div>
-						<div class="col-sm-4">M-F business hours <strong>only</strong></div>
+						<div class="section-primary col-sm-10">Email 7 days a week</div>
 					</div>
-					
-					
-<!-- 						<table class="table table-striped table-hover">
-							<thead>
-								<tr>
-									<td class="feature-label"></td>
-									<td class="section-primary">KB Geo</td>
-									<td>Competitors</td>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td class="feature-label"><i class="fa fa-motorcycle"></i> Speed</td>
-									<td class="section-primary">Less than <strong>a second</strong></td>
-									<td>45 seconds to <strong>2 minutes</strong></td>
-								</tr>
-								<tr>
-									<td class="feature-label"><i class="fa fa-usd"></i> Pricing</td>
-									<td class="section-primary">Far less than competitors</td>
-									<td>More than <strong>$1.00/call</strong></td>
-								</tr>
-								<tr>
-									<td class="feature-label"><i class="fa fa-lock"></i> Security</td>
-									<td class="section-primary">Auth token, IP binding, domain binding, SSL Encryption</td>
-									<td><strong>Plaintext password</strong> in URL</td>
-								</tr>
-								<tr>
-									<td class="feature-label"><i class="fa fa-phone"></i> Support</td>
-									<td class="section-primary">Email 7 days a week</td>
-									<td>M-F business hours <strong>only</strong></td>
-								</tr>
-								<tr>
-									<td class="feature-label"><i class="fa fa-file-text-o"></i> Format</td>
-									<td class="section-primary">JSON</td>
-									<td>Schema-less XML</td>
-								</tr>
-							</tbody>
-						</table> -->
-					</div>
+				</div>
 					<div class="row">
 						<h3 id="documentation" class="center" style="color: white"><a href="http://docs.kbgeo.com">Great developer documentation</a> for faster REST web service integration!</h3>
 					</div>
-                </div> 
+               </div> 
             </div> 
         </div>
     </section><!--/#comparison-->
@@ -249,6 +213,7 @@
                         <h1>Contact Us</h1>
                         <div class="status alert alert-success" style="display: none"></div>
                         <form id="main-contact-form" class="contact-form" name="contact-form" method="post" role="form">
+                        	<input id="contractType" name="contractType" type="hidden" value="dtf"></input>
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
@@ -270,9 +235,9 @@
                                         <input id="contactPhone" type="text" class="form-control" placeholder="Phone">
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group" style="color: white">
-                                        <input id="contactFreeTrialKey" type="checkbox" checked style="color: white"> Send me a free trial key immediately</input>
+                                <div class="col-sm-10">
+                                    <div class="form-group" style="color: #ff9b00">
+                                        <input id="contactFreeTrialKey" type="checkbox" checked style="color: white; width: 20%"> Send me a free trial key immediately!</input>
                                     </div>
                                 </div>
                             </div>
@@ -320,55 +285,40 @@
                 <div class="row">
                 	<div class="col-md-12 col-lg-6">
 	                    <div class="question">
-							Q: Who uses Distance to Coast calculations?
+							Q: Who uses Nearest Fire Station calculations?
 							<div class="answer">
-								Distance to Coast and Distance to Shoreline are widely used in the insurance risk business. Property insurance underwriters use DTC to determine how likely a property near a coastal shore is to sustain storm damage. Typically properties less than 100 miles inland are considered a risk, with those closest to the water assigned the highest risk level.
-							</div>
-	                    </div>
-	                    <div class=" question">
-							Q: How does KB Geo provide such high accuracy?
-							<div class="answer">
-								To get high-accuracy distance to coast, the coastline definition must be accurate. KB Geo derives a standard CONUS coastline definition from sources like NOAA, then processes the entire dataset through custom geopoint error-checking and refinement algorithms. Every time a customer requests Distance to Coast for a point in the United States, more purpose-built algorithms are executed to determine the nearest possible point on the defined coastline. The output of this process is available through our REST web service.
+								Distance to Fire Station and Nearest Fire Station are widely used in the insurance risk business. Property insurance underwriters use Nearest Fire Station to determine how likely a property is to sustain damage before the nearest fire department can respond and extinguish a fire event.
 							</div>
 	                    </div>
 	                    <div class="question">
-							Q: What makes KB Geo faster than other Distance to Coast services?
+							Q: What makes KB Geo faster than other Nearest Fire Station services?
 							<div class="answer">
-								KB Geo has invested in advanced software that breaks down the Distance to Coast problem into much smaller problems that are then solved with the fastest available algorithms. Data caching and grooming keeps KB Geo Distance to Coast REST web service results fast and reliable.
+								KB Geo has invested in advanced software and computing optimizations that make Distance to Fire Station blazing fast.
 							</div>
 	                    </div>
 	                    <div class="question">
-							Q: What if my IT department has trouble using the KB Geo Distance to Coast REST web service?
+							Q: What if my IT department has trouble using the KB Geo Nearest Fire Station REST web service?
 							<div class="answer">
 								KB Geo provides clear, comprehensive, understandable documentation with example code. We have software developers on staff to provide integration support if needed as well.
 							</div>
 	                    </div>
                     </div>
                     <div class="col-md-12 col-lg-6">
-                    	<div class="question">
-							Q: How can I use the KB Geo Distance to Coast REST web service with my own coastline definition?
-							<div class="answer">
-								<p>KB Geo can import your custom coastline as a set of latitude and longitude pairs and run all of its performance-improving indexing and reduction algorithms against your data. When your systems request Distance to Coast, the results will return distance to the closest point on your custom coastline. This process can be included in your monthly cost.</p>
-								<p>KB Geo also provides geospatial plotting services if you don't already have a coastline defined. <a href="#contact">Contact us</a> for more information!</p>
-							</div>
-	                    </div>
 	                    <div class="question">
-							Q: Why is KB Geo the best choice among competing distance to shoreline providers?
+							Q: Why is KB Geo the best choice among competing Distance to Fire Station providers?
 							<div class="answer">
-								<p>KB Geo's coastline model is highly accurate, high-performance, secure, and covers the ENTIRE continental US. Other providers have inaccurate coastlines, long delays on each service call, and state-sized holes in their coverage.</p>
-								<p>If you currently wait 1 1/2 minutes for your DTC provider's web service results, KB Geo will save the average underwriter 124 hours (3 work weeks!) every year - and cost less as well. <a href="#contact">Contact us</a> to get started!</p>
+								<p>KB Geo's Nearest Fire Station service is highly accurate, high-performance, and secure.</p>
 								<div>
-									<p>We're so sure KB Geo Distance to Coast is your best choice that we'll even help you try out our competitors:</p>
+									<p>We're so sure KB Geo Nearest Fire Station is your best choice that we'll even help you try out our competitors:</p>
 									<ul>
-										<li><a href="https://riskmeter.com/sl_resources.htm" target="_new" title="Open RiskMeter Distance to Coast in a new window">RiskMeter Distance to Coast</a></li>
-										<li><a href="http://www.hazardhub.com/distance-to-coast" target="_new" title="Open HazardHub Distance to Coast in a new window">HazardHub Distance to Coast</a></li>
-										<li><a href="http://www.maprisk.com" target="_new" title="Open MapRisk in a new window">MapRisk</a></li>
+										<li><a href="https://riskmeter.com/wildfire_downloads.htm" target="_new" title="Open RiskMeter Wildfire in a new window">RiskMeter</a></li>
+										<li><a href="http://hazardhub.com/firestation" target="_new" title="Open HazardHub Nearest Fire Station in a new window">HazardHub Nearest Fire Station - 2.5 seconds per call!</a></li>
 									</ul>
 								</div>
 							</div>
 	                    </div>
 	                    <div class="question">
-							Q: How can I get in touch if I'm having problems with KB Geo Distance to Coast?
+							Q: How can I get in touch if I'm having problems with KB Geo Nearest Fire Station web service?
 							<div class="answer">
 								KB Geo provides responsive customer support by email 7 days a week. You can also <a href="#contact">contact us</a> through this website.
 							</div>
@@ -388,17 +338,9 @@
                 </div><!--/.center-->   
                 <div class="row">
                 	<div class="col-sm-12 center">
-                		<h4>KB Geo provides software services in addition to fast, secure, inexpensive Distance to Coast.</h4> 
+                		<h4>KB Geo provides software services in addition to fast, secure, inexpensive Distance to Fire Station.</h4> 
                 	</div>
                 	<div class="col-md-12 col-lg-6">
-	                    <div class="question">
-							Custom Coastline Definition
-							<div class="answer">
-								<p>KB Geo has built tools, infrastructure, and experience to make geospatial plotting quick and accurate. We can create an ordered custom latitude/longitude boundary set for anything - not just coastlines.</p>
-								<p>Customers have provided us with source documents such as hand-drawn maps, PDFs, county names, and descriptions like "1 mile south of the Hwy 73 bridge". We do the legwork to define a highly accurate set of latitude and longitude points.</p>
-								<p>If you have an existing set of coordinates that needs refinement, <a href="#contact">contact us</a>! We can import your coordinates into our tools and make the changes you need.</p>   
-							</div>
-	                    </div>
 	                    <div class=" question">
 							Custom Software Development
 							<div class="answer">
@@ -425,7 +367,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-12 center">
-                	<span>Copyright 2008 - <span id="copyrightEndDate">2017</span> KBS Systems LLC</span>
+                	<span>Copyright 2008 - <span id="copyrightEndDate">2018</span> KBS Systems LLC</span>
                 </div>
             </div>
         </div>
@@ -466,7 +408,7 @@
 {
   "@context": "http://schema.org/",
   "@type": "Product",
-  "name": "Distance to Coast REST API",
+  "name": "Distance to Fire Station REST API",
   "brand": "KB Geo"
 }
 </script>
@@ -479,7 +421,7 @@
   "applicationCategory": "BusinessApplication",
   "applicationSubCategory": "Web Service API",
   "featureList": "Distance to Coast calculation",
-  "about": "KB Geo Distance to Coast is a fast, secure, and inexpensive RESTful web service API for retrieving the distance an address or lat/long and the nearest point on the coastline.",
+  "about": "KB Geo provides fast, accurate, easy distance to fire station calculations for insurance risk and other industries as an easily-integrated web service.",
   "copyrightHolder": "KBS Systems LLC",
   "copyrightYear": "2013",
   "url": "http://www.kbgeo.com"

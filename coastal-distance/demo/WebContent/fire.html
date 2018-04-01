@@ -5,10 +5,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="KB GeoRisk distance to coast calculation demonstration">
-    <meta name="author" content="Steve Perkins, KB GeoRisk">
+    <meta name="description" content="KB Geo distance to fire station API demonstration">
+    <meta name="author" content="Steve Perkins, KB Geo">
 
-    <title>KB GeoRisk</title>
+    <title>KB Geo Distance to Fire Station Demo</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -28,12 +28,11 @@
 
 <body>
     <div id="wrapper" class="toggled">
-    	<img src="img/cic-logo.png" style="position: absolute;top: 0;right: 0;z-index: 1;"/>
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
-                    <a href="http://www.kbgeo.com">
+                    <a href="http://www.kbgeo.com/fire.html">
                        <img src="img/kbgeo-logo.png" /> KB GeoRisk
                     </a>
                 </li>
@@ -69,10 +68,6 @@
 					  <button id="address-go" type="button" class="btn btn-primary center-block" onclick="addressFormSubmit();return">Go!</button>
 				  </div>
 			    </div>
-			    <div class="form-group">
-					<label for="authToken">Token:</label>
-					<input type="text" class="form-control" id="authToken" placeholder="Auth token">
-				</div>
 			    <div style="text-align: center">
 			    	<span id="errorMessage"></span>
 			    </div>
@@ -80,9 +75,11 @@
 			<div id="stats">
 				<span class="responseTime"></span>
 			</div>
-			
+			<div id="freeTrial" style="text-align: center;">
+				<a href="http://www.kbgeo.com/fire.html#contact" style="color: #00ff00">Get your free trial key now!</a>
+			</div>
             <div id="footer">
-            	KB GeoRisk provides <strong>blazing-fast</strong>, <strong>highly-accurate</strong>, <strong>low-cost</strong> distance to coast calculation for insurance risk and other industries.
+            	KB GeoRisk provides <strong>blazing-fast</strong>, <strong>easy-to-use</strong>, <strong>low-cost</strong> distance to fire station calculation for insurance risk and other industries.
             	<div style="margin-top: 20px">
 	            	<img src="img/firefox.png" /> <a id="firefox-warning" href="#" style="color: white">Firefox user?</a>
 	            	<div id="firefox-warning-text" style="display: none">Firefox's March 2015 update disables CORS support. You may need to change your Firefox settings to enable CORS or use another browser.</div>
@@ -115,10 +112,11 @@
     <!-- Menu Toggle Script -->
     <script>
 	var ROOT = "https://api.kbgeo.com";
-	// var ROOT = "http://localhost:8080/api";
+	//var ROOT = "http://localhost:8080/api";
+	var authToken = "mNW93W1@pA";
 	var map;
 	var originPoint;
-	var coastalPoint;
+	var fireStationPoint;
 	
 	$(window).on('resize orientationChange', function(event) {
 		resetMapSize();
@@ -197,31 +195,85 @@
 		originPoint = latLngFormValidateAndParse();
 		if(null == originPoint) return;		
 		
-		// Throw an ajax call to get the nearest coastal point and distance, then add marker for coastal point and set label for both points to distance in miles
+		// Throw an ajax call to get the nearest fire station and distance, then add marker for fire station and set label for both points to distance in miles
+		markRequestSendTime();
 		$.ajax({
 			type: 'GET',
-			url: ROOT + "/coastal-distance/v1/coord?lat=" + originPoint.lat + "&lng=" + originPoint.lng,
+			url: ROOT + "/fire-station/v1/coord?lat=" + originPoint.lat + "&lng=" + originPoint.lng,
 			headers: {
-				"kb-auth-token": $("#authToken").val()
+				"kb-auth-token": authToken
 			},
 			contentType: 'text/plain'
 		}).error(function(jqXHR, textStatus, errorThrown) {
-			console.error("Could not get coastal distance: " + errorThrown);
+			console.error("Could not get fire station distance: " + errorThrown);
 			if(jqXHR.responseJSON && jqXHR.responseJSON.error) {
 				console.error(jqXHR.responseJSON.error);
 				showError(jqXHR.responseJSON.error);
 				return;
 			}
 		}).done(function(data) {
-			createOriginPointMarker(map, data.targetPoint, data.distanceInMiles);
+			// console.log(data);
+			markResponseReceivedTime();
+			showStats();
 			
-			coastalPoint = data.coastlinePoint;
-			createCoastalPointMarker(map, coastalPoint);
+			createOriginPointMarker(map, originPoint, data.distanceInMiles);
+			var fireStationMarker = createFireStationPointMarker(map, data.fireDepartment, data.fireDepartment.name);
+			drawLineBetween(originPoint, data.fireDepartment, map, "red");
 			
-			drawLineBetween(originPoint, coastalPoint, map);
+			var infoWindow = new google.maps.InfoWindow({
+	          content: fireStationResultToHtml(data)
+	        });
+			fireStationMarker.addListener('click', function() {
+				infoWindow.open(map, fireStationMarker);
+	        });
+			
 		});
 	}
 	
+	function fireStationResultToHtml(result) {
+		var html = "<b>" + result.fireDepartment.name + "</b>";
+		html += "<br /><br /><table>";
+		html += "<tr><td><b>Type:</b> </td><td>" + result.fireDepartment.organizationType + "</td></tr>";
+		html += "<tr><td><b>Distance:</b> </td><td>" + result.distanceInMiles + "</td></tr>";
+		html += "<tr><td><b>Driving Distance:</b> </td><td>" + result.drivingDistanceInMiles + "</td></tr>";
+		html += "<tr><td><b>Driving Time:</b> </td><td>" + secondsToHumanReadable(result.drivingDurationInSeconds) + "</td></tr>";
+		html += "<tr><td><b>Staff:</b> </td><td>" + result.fireDepartment.staffType + "</td></tr>";
+		if(result.fireDepartment.careerFirefighterCount && result.fireDepartment.careerFirefighterCount > 0) {
+			html += "<tr><td><b>Career firefighters:</b> </td><td>" + result.fireDepartment.careerFirefighterCount + "</td></tr>";
+		}
+		if(result.fireDepartment.paidPerCallFirefighterCount && result.fireDepartment.paidPerCallFirefighterCount > 0) {
+			html += "<tr><td><b>PPC firefighters:</b> </td><td>" + result.fireDepartment.paidPerCallFirefighterCount + "</td></tr>";
+		}
+		if(result.fireDepartment.volunteerFirefighterCount && result.fireDepartment.volunteerFirefighterCount > 0) {
+			html += "<tr><td><b>Volunteer firefighters:</b> </td><td>" + result.fireDepartment.volunteerFirefighterCount + "</td></tr>";
+		}
+		if(result.fireDepartment.paidCivilianCount && result.fireDepartment.paidCivilianCount > 0) {
+			html += "<tr><td><b>Civilian employees:</b> </td><td>" + result.fireDepartment.paidCivilianCount + "</td></tr>";
+		}
+		if(result.fireDepartment.volunteerCivilianCount && result.fireDepartment.volunteerCivilianCount > 0) {
+			html += "<tr><td><b>Civilian volunteers:</b> </td><td>" + result.fireDepartment.volunteerCivilianCount + "</td></tr>";
+		}
+		if(result.fireDepartment.website && result.fireDepartment.website.indexOf("http") == 1) {
+			html += "<tr><td colspan='2'>" + result.fireDepartment.website + "</td></tr>";
+		}
+		html += "</table>";
+		return html;
+	}
+	
+	function secondsToHumanReadable(seconds) {
+		var result = "";
+		var d = new Date(seconds * 1000);
+		if(d.getUTCHours() > 0) {
+			result += d.getUTCHours() + " hour" + (d.getUTCHours() > 1 ? "s" : "");
+		}
+		if(d.getUTCMinutes() > 0) {
+			result += d.getUTCMinutes() + " minute" + (d.getUTCMinutes() > 1 ? "s" : "");
+		}
+		if(result.length == 0) {
+			result = "Less than a minute";
+		}
+		return result;
+	}
 	
 	// Validates input and returns address string
 	function addressFormValidateAndParse() {
@@ -247,31 +299,43 @@
 		
 		if(null == address) return;		
 		
-		// Throw an ajax call to geolocate and get the nearest coastal point and distance
+		// Throw an ajax call to geolocate and get the nearest fire station point and distance
+		markRequestSendTime();
 		$.ajax({
 			type: 'GET',
-			url: ROOT + "/coastal-distance/v1/address?address=" + address,
+			url: ROOT + "/fire-station/v1/address?address=" + address,
 			headers: {
-				"kb-auth-token":  $("#authToken").val()
+				"kb-auth-token": authToken
 			},
 			contentType: 'text/plain'
 		}).error(function(jqXHR, textStatus, errorThrown) {
-			console.error("Could not get coastal distance for address: " + errorThrown);
+			console.error("Could not get fire station distance for address: " + errorThrown);
 			if(jqXHR.responseJSON && jqXHR.responseJSON.error) {
 				console.error(jqXHR.responseJSON.error);
 				showError(jqXHR.responseJSON.error);
 				return;
 			}
 		}).done(function(data) { 
+			// console.log(data);
+			markResponseReceivedTime();
+			showStats();
+			
 			if(data.error) {
 				showError(data.error);
 				return;
 			}
 			
 			createOriginPointMarker(map, data.targetPoint, data.distanceInMiles);
-			createCoastalPointMarker(map, data.coastlinePoint);
+			var fireStationMarker = createFireStationPointMarker(map, data.fireDepartment, data.fireDepartment.name);
 			
-			drawLineBetween(data.targetPoint, data.coastlinePoint, map);
+			drawLineBetween(data.targetPoint, data.fireDepartment, map, "red");
+			
+			var infoWindow = new google.maps.InfoWindow({
+	          content: fireStationResultToHtml(data)
+	        });
+			fireStationMarker.addListener('click', function() {
+				infoWindow.open(map, fireStationMarker);
+	        });
 		});
 	}
 	
@@ -353,6 +417,28 @@
 		errorElement.html("");
 	}
 	
+	var responseTimeMs = 0;
+	var requestSendTime;
+	function markRequestSendTime() {
+		requestSendTime = new Date().getTime();
+	}
+	
+	var responseReceivedTime;
+	function markResponseReceivedTime() {
+		responseReceivedTime = new Date().getTime();
+		responseTimeMs = responseReceivedTime - requestSendTime;
+	}
+	
+	function getResponseTimeMs() { return responseTimeMs; }
+	
+	function showResponseTime() {
+		$("#stats .responseTime").text("Time: " + responseTimeMs + "ms");
+	}
+	
+	function showStats() {
+		showResponseTime();
+	}
+
 	$( document ).ready(function() {
 		googleMapLibraryLoaded();
 		$("#lat, #lng").on("keydown",function search(e) {
