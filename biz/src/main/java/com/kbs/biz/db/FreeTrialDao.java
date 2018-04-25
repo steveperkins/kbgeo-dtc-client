@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,10 +18,10 @@ import com.kbs.biz.model.ContactUs;
 @Component
 public class FreeTrialDao {
 	
-	private static final String INSERT_CLIENT_SQL = "INSERT INTO kbs_client (name, address, city, state, zip, phone, created) VALUES(?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
-	private static final String INSERT_CLIENT_CONTACT_SQL = "INSERT INTO client_contact (client_id, last_name, first_name, email, address, city, state, zip, phone, is_primary, created) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
-	private static final String INSERT_CLIENT_CONTRACT_SQL = "INSERT INTO client_contract (client_id, name, request_type_id, max_requests, cents_per_request, starts, expires, created) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String INSERT_CLIENT_AUTH_SQL = "INSERT INTO client_auth (client_id, name, token, expires, created, updated) VALUES(?, ?, ?, ?, ?, ?)";
+//	private static final String INSERT_CLIENT_SQL = "INSERT INTO kbs_client (name, address, city, state, zip, phone, created) VALUES(?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+//	private static final String INSERT_CLIENT_CONTACT_SQL = "INSERT INTO client_contact (client_id, last_name, first_name, email, address, city, state, zip, phone, is_primary, created) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+//	private static final String INSERT_CLIENT_CONTRACT_SQL = "INSERT INTO client_contract (client_id, name, request_type_id, max_requests, cents_per_request, starts, expires, created) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+//	private static final String INSERT_CLIENT_AUTH_SQL = "INSERT INTO client_auth (client_id, name, token, expires, created, updated) VALUES(?, ?, ?, ?, ?, ?)";
 	
 	@Autowired
 	@Qualifier("apiDataSource")
@@ -67,10 +68,14 @@ public class FreeTrialDao {
                 .withTableName("client_contract")
                 .usingGeneratedKeyColumns("id");
 		
+        int contractType = 2; // Distance to Coast
+        if(StringUtils.isNotBlank(contactUs.getContractType()) && "dtf".equalsIgnoreCase(contactUs.getContractType())) {
+        	contractType = 4; // Distance to Fire Station
+        }
 		parameters = new HashMap<String, Object>(8);
         parameters.put("client_id", clientId);
         parameters.put("name", contactUs.getCompany());
-        parameters.put("request_type_id", 2);
+        parameters.put("request_type_id", contractType);
         parameters.put("max_requests", 100L);
         parameters.put("cents_per_request", 0);
         parameters.put("starts", new DateTime().toDate());

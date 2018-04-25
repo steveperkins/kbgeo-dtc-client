@@ -2,12 +2,13 @@ package com.kbs.biz.model;
 
 public class ContactUs {
 	private Long id;
-	String name;
-	String company;
-	String email;
-	String phone;
-	String message;
-	Boolean requestFreeTrial = Boolean.FALSE;
+	private String name;
+	private String company;
+	private String email;
+	private String phone;
+	private String message;
+	private Boolean requestFreeTrial = Boolean.FALSE;
+	private String contractType;
 	
 	public Long getId() {
 		return id;
@@ -53,5 +54,11 @@ public class ContactUs {
 			requestFreeTrial = Boolean.FALSE;
 		}
 		this.requestFreeTrial = requestFreeTrial;
+	}
+	public String getContractType() {
+		return contractType;
+	}
+	public void setContractType(String contractType) {
+		this.contractType = contractType;
 	}
 }

@@ -56,7 +56,7 @@ public class ContactUsService {
 //				
 //				if(response.getStatusCode().equals(HttpStatus.OK)) {
 //					String apiKey = response.getBody();
-					clientMailService.sendFreeTrialApiKeyMessage(contactUs, apiKey);
+					clientMailService.sendFreeTrialApiKeyMessage(contactUs, apiKey, contactUs.getContractType());
 //				}
 //				String apiKey = restTemplate.getForObject(trialKeyUrl, String.class);
 			} catch(Exception e) {

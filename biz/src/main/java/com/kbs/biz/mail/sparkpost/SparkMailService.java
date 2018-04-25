@@ -46,11 +46,11 @@ public class SparkMailService {
     	}
     }
     
-	public Boolean sendFreeTrialApiKeyMessage(ContactUs contactUs, String apiKey) {
+	public Boolean sendFreeTrialApiKeyMessage(ContactUs contactUs, String apiKey, String contractType) {
 		try {
 			sendEmail(
 					new SparkMailMessage()
-					.withContent(new FreeTrialApiKeyMessage(contactUs.getName(), apiKey))
+					.withContent(new FreeTrialApiKeyMessage(contactUs.getName(), apiKey, contactUs.getContractType()))
 					.withRecipients(contactUs.getEmail()));
 			return Boolean.TRUE;
 		} catch (EmailException e) {
@@ -64,7 +64,7 @@ public class SparkMailService {
 			sendEmail(
 					new SparkMailMessage()
 					.withContent(new ContactUsMessage(contactUs))
-					.withRecipients("perkins.steve@gmail.com"));
+					.withRecipients("perkins.steve@gmail.com", "sales@kbgeo.com"));
 			return Boolean.TRUE;
 		} catch (EmailException e) {
 			logger.error(String.format("Could not send new contact us message from %s", contactUs.getEmail()));
