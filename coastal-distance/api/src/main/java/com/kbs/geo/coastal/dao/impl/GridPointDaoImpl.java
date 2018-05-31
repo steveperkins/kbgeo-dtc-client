@@ -41,7 +41,7 @@ public class GridPointDaoImpl extends AbstractDao<GridPoint> implements GridPoin
 	private static final String GET_OFFSET_SQL = "SELECT * FROM grid_point where closest_coastline_point_id is null ORDER BY id LIMIT ?, ?";
 	private static final String GET_ALL_SQL = "SELECT * FROM grid_point";
 //	private static final String GET_POINTS_SURROUNDING_SQL = "SELECT * FROM grid_point WHERE lat BETWEEN (? - " + BOUNDING_BOX_OFFSET_LAT + ") AND (? + " + BOUNDING_BOX_OFFSET_LAT + ") AND lon BETWEEN (? - " + BOUNDING_BOX_OFFSET_LON + ") AND (? + " + BOUNDING_BOX_OFFSET_LON + ")";
-	private static final String GET_POINTS_SURROUNDING_SQL = "SELECT gp.id, gp.lat, gp.lon, gpccp.coastline_point_id, gpccp.distance_in_miles FROM grid_point gp JOIN grid_point_client_coastline_point gpccp ON gp.id=gpccp.grid_point_id JOIN coastline_point cp ON gpccp.coastline_point_id=cp.id  WHERE gpccp.client_id=? AND cp.client_id=? AND gp.lat BETWEEN (? - " + BOUNDING_BOX_OFFSET + ") AND (? + " + BOUNDING_BOX_OFFSET + ") AND gp.lon BETWEEN (? - " + BOUNDING_BOX_OFFSET + ") AND (? + " + BOUNDING_BOX_OFFSET + ")";
+	private static final String GET_POINTS_SURROUNDING_SQL = "SELECT gp.id, gp.lat, gp.lon, gpccp.coastline_point_id, gpccp.distance_in_miles FROM grid_point gp JOIN grid_point_client_coastline_point gpccp ON gp.id=gpccp.grid_point_id JOIN coastline_point cp ON gpccp.coastline_point_id=cp.id WHERE gpccp.client_id=? AND cp.client_id=? AND gp.lat BETWEEN (? - " + BOUNDING_BOX_OFFSET + ") AND (? + " + BOUNDING_BOX_OFFSET + ") AND gp.lon BETWEEN (? - " + BOUNDING_BOX_OFFSET + ") AND (? + " + BOUNDING_BOX_OFFSET + ")";
 //	private static final String GET_COASTLINE_POINT_SORT_ORDERS_SURROUNDING_SQL = "SELECT MIN(cp.sort_order) AS min_sort_order, MAX(cp.sort_order) AS max_sort_order FROM grid_point gp JOIN grid_point_client_coastline_point gpccp ON gp.id=gpccp.grid_point_id JOIN coastline_point cp ON gpccp.coastline_point_id=cp.id AND gpccp.client_id=cp.client_id WHERE gpccp.client_id=? AND gp.lat BETWEEN (? - " + BOUNDING_BOX_OFFSET_LAT + ") AND (? + " + BOUNDING_BOX_OFFSET_LAT + ") AND gp.lon BETWEEN (? - " + BOUNDING_BOX_OFFSET_LON + ") AND (? + " + BOUNDING_BOX_OFFSET_LON + ")";
 	private static final String GET_COASTLINE_POINT_SORT_ORDERS_SURROUNDING_SQL = "SELECT MIN(cp.sort_order) AS min_sort_order, MAX(cp.sort_order) AS max_sort_order FROM grid_point gp JOIN grid_point_client_coastline_point gpccp ON gp.id=gpccp.grid_point_id JOIN coastline_point cp ON gpccp.coastline_point_id=cp.id AND gpccp.client_id=cp.client_id WHERE gpccp.client_id=? AND gp.lat BETWEEN (? - " + BOUNDING_BOX_OFFSET + ") AND (? + " + BOUNDING_BOX_OFFSET + ") AND gp.lon BETWEEN (? - " + BOUNDING_BOX_OFFSET + ") AND (? + " + BOUNDING_BOX_OFFSET + ")";
 	private static final String GET_POINTS_WEST_OF_LAT_SQL = "SELECT * FROM grid_point WHERE lat =< ?";
@@ -116,12 +116,26 @@ public class GridPointDaoImpl extends AbstractDao<GridPoint> implements GridPoin
 	@Override
 	public List<GridPoint> getPointsSurrounding(Integer clientId, LatLng coordinate) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
+		////// TODO DIRTY HACK
+		// We don't have a way to quickly determine if the current client has custom coastline points. The query needs to be rewritten to check for custom coastline points
+		// and fall back to client ID 1's coastline (the default) if not. There's no time to do that right now.
+		if(clientId != 2) { // CIC
+			clientId = 1;
+		}
+			
 		List<GridPoint> gridPoints = jdbcTemplate.query(GET_POINTS_SURROUNDING_SQL, new Number[]{ clientId, clientId, coordinate.getLat(), coordinate.getLat(), coordinate.getLng(), coordinate.getLng() }, new ClientGridPointRowMapper());
 		return gridPoints;
 	}
 	
 	@Override
 	public MinMaxCoastlinePointSortOrder getBoundingCoastlinePointSortOrders(Integer clientId, LatLng coordinate) {
+		////// TODO DIRTY HACK
+		// We don't have a way to quickly determine if the current client has custom coastline points. The query needs to be rewritten to check for custom coastline points
+		// and fall back to client ID 1's coastline (the default) if not. There's no time to do that right now.
+		if(clientId != 2) { // CIC
+			clientId = 1;
+		}
+		
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
 		MinMaxCoastlinePointSortOrder boundingSortOrders = jdbcTemplate.queryForObject(GET_COASTLINE_POINT_SORT_ORDERS_SURROUNDING_SQL, new Number[]{ clientId, coordinate.getLat(), coordinate.getLat(), coordinate.getLng(), coordinate.getLng() }, new MinMaxCoastlinePointSortOrderRowMapper());
 		return boundingSortOrders;

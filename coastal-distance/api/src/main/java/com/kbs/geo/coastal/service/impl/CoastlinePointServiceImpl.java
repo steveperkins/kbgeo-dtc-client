@@ -109,6 +109,7 @@ public class CoastlinePointServiceImpl implements CoastlinePointService {
 		result.setTargetPoint(targetPoint);
 		return result;
 	}
+	
 	@Override
 	public Double getMilesBetween(LatLng targetPoint, CoastlinePoint coastlinePoint) {
 		DistanceCalculator distanceCalculator = new DefaultDistanceCalculatorImpl(targetPoint, coastlinePoint);

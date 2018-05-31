@@ -51,8 +51,8 @@ jQuery(function($) {
 		
 		// Send the message
 		$.ajax({
-			type: 'POST',
-			url: 'http://biz.kbgeo.com/contact-us',
+			type: "POST",
+			url: "http://biz.kbgeo.com/contact-us",
 //			url: 'http://localhost:8080/biz/contact-us',
 			//headers: { "kb-auth-token": "gaA34o32" },
 			data: JSON.stringify({
@@ -68,8 +68,8 @@ jQuery(function($) {
 				$("#main-contact-form").prev().text(data.message).fadeIn().delay(3000).fadeOut();
 				$("#contactUsSubmit").attr("disabled", true);
 			},
-			contentType: 'application/json',
-			dataType: 'json'
+			contentType: "application/json",
+			dataType: "json"
 		});
 		
 		return false;
