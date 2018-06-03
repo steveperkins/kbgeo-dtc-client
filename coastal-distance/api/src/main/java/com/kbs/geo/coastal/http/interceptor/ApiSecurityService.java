@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -60,6 +62,15 @@ public class ApiSecurityService {
 	@Autowired
 	private RequestErrorService requestErrorService;
 	
+	private Date lastAuthRefererLookup = new Date();
+	private Map<Integer, List<ClientAuthReferer>> clientAuthIdToAuthReferersMap = new HashMap<Integer, List<ClientAuthReferer>>();
+	
+	private Date lastContractLookup = new Date();
+	private Map<Integer, List<ClientContract>> clientIdToContractsMap = new HashMap<Integer, List<ClientContract>>();
+	
+	private Date lastAuthIpLookup = new Date();
+	private Map<Integer, List<ClientAuthIp>> clientAuthIdToAuthIpsMap = new HashMap<Integer, List<ClientAuthIp>>();
+	
 	public ClientAuth authenticateRequest(String authToken, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException, ServletException, InvalidSecurityTokenException {
 		if(StringUtils.isBlank(authToken)) {
 			// No token provided
@@ -88,8 +99,19 @@ public class ApiSecurityService {
 		}
 		LOG.info("Auth token verified to be unexpired");
 		
+		Calendar fiveMinutesAgoCal = Calendar.getInstance();
+		fiveMinutesAgoCal.roll(Calendar.MINUTE, -5);
+		Date fiveMinutesAgo = fiveMinutesAgoCal.getTime();
+		
 		// Find the contract associated with this client
-		List<ClientContract> clientContracts = clientContractService.getByClientId(clientAuth.getClientId());
+		List<ClientContract> clientContracts;
+		if(lastContractLookup.after(fiveMinutesAgo) && clientIdToContractsMap.containsKey(clientAuth.getClientId())) {
+			clientContracts = clientIdToContractsMap.get(clientAuth.getClientId());
+		} else {
+			clientContracts = clientContractService.getByClientId(clientAuth.getClientId());
+			lastContractLookup = new Date();
+			clientIdToContractsMap.put(clientAuth.getClientId(), clientContracts);
+		}
 		if(null == clientContracts || clientContracts.isEmpty()) {
 			KbsRestException ex = new ServiceNotAllocatedException();
 			recordError(null, ex, httpServletRequest, httpServletResponse);
@@ -98,8 +120,15 @@ public class ApiSecurityService {
 		LOG.info("Client contracts found with this token");
 		
 		// Check for source IP filters
+		List<ClientAuthIp> authIps;
+		if(lastAuthIpLookup.after(fiveMinutesAgo) && clientAuthIdToAuthIpsMap.containsKey(clientAuth.getId())) {
+			authIps = clientAuthIdToAuthIpsMap.get(clientAuth.getId());
+		} else {
+			authIps = clientAuthIpService.getByClientAuthId(clientAuth.getId());
+			lastAuthIpLookup = new Date();
+			clientAuthIdToAuthIpsMap.put(clientAuth.getId(), authIps);
+		}
 		String sourceIp = httpServletRequest.getRemoteAddr();
-		List<ClientAuthIp> authIps = clientAuthIpService.getByClientAuthId(clientAuth.getId());
 		if(null != authIps && !authIps.isEmpty()) {
 			// If the originating IP doesn't match any of the authorized IPs, prevent access
 			Boolean ipFound = Boolean.FALSE;
@@ -118,8 +147,15 @@ public class ApiSecurityService {
 		}
 		LOG.info(String.format("Source IP (%s) is OK", sourceIp));
 		
-		// Check for source IP filters
-		List<ClientAuthReferer> authReferers = clientAuthRefererService.getByClientAuthId(clientAuth.getId());
+		// Check for referrer filters
+		List<ClientAuthReferer> authReferers;
+		if(lastAuthRefererLookup.after(fiveMinutesAgo) && clientAuthIdToAuthReferersMap.containsKey(clientAuth.getId())) {
+			authReferers = clientAuthIdToAuthReferersMap.get(clientAuth.getId());
+		} else {
+			authReferers = clientAuthRefererService.getByClientAuthId(clientAuth.getId());
+			lastAuthRefererLookup = new Date();
+			clientAuthIdToAuthReferersMap.put(clientAuth.getId(), authReferers);
+		}
 		if(null != authReferers && !authReferers.isEmpty()) {
 			// If the originating IP doesn't match any of the authorized IPs, prevent access
 			String referrer = httpServletRequest.getHeader("referer");

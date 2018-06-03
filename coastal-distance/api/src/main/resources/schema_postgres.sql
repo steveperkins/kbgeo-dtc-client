@@ -19,6 +19,8 @@ CREATE TABLE kbs_client (
   state char(2) DEFAULT NULL,
   zip varchar(10) DEFAULT NULL,
   phone varchar(11) DEFAULT NULL,
+  -- the client_id to use when querying coastline segments. If not set, 1 will be used.
+  coastline_client_id INTEGER NULL,
   created timestamp with time zone NOT NULL,
   updated timestamp with time zone DEFAULT NULL
 );
@@ -179,6 +181,8 @@ CREATE TABLE coastline_point (
   segment_id INTEGER NOT NULL
 );
 
+CREATE INDEX idx_coastline_point_client_id_segment_id ON coastline_point(client_id, segment_id);
+CREATE INDEX idx_coastline_point_client_id_sort_order ON coastline_point(client_id, sort_order);
 
 CREATE OR REPLACE FUNCTION coastline_point_partition_trigger()
 RETURNS TRIGGER AS 

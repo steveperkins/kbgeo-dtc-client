@@ -6,6 +6,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +42,9 @@ public class GridPointDaoImpl extends AbstractDao<GridPoint> implements GridPoin
 	private static final String GET_OFFSET_SQL = "SELECT * FROM grid_point where closest_coastline_point_id is null ORDER BY id LIMIT ?, ?";
 	private static final String GET_ALL_SQL = "SELECT * FROM grid_point";
 //	private static final String GET_POINTS_SURROUNDING_SQL = "SELECT * FROM grid_point WHERE lat BETWEEN (? - " + BOUNDING_BOX_OFFSET_LAT + ") AND (? + " + BOUNDING_BOX_OFFSET_LAT + ") AND lon BETWEEN (? - " + BOUNDING_BOX_OFFSET_LON + ") AND (? + " + BOUNDING_BOX_OFFSET_LON + ")";
-	private static final String GET_POINTS_SURROUNDING_SQL = "SELECT gp.id, gp.lat, gp.lon, gpccp.coastline_point_id, gpccp.distance_in_miles FROM grid_point gp JOIN grid_point_client_coastline_point gpccp ON gp.id=gpccp.grid_point_id JOIN coastline_point cp ON gpccp.coastline_point_id=cp.id WHERE gpccp.client_id=? AND cp.client_id=? AND gp.lat BETWEEN (? - " + BOUNDING_BOX_OFFSET + ") AND (? + " + BOUNDING_BOX_OFFSET + ") AND gp.lon BETWEEN (? - " + BOUNDING_BOX_OFFSET + ") AND (? + " + BOUNDING_BOX_OFFSET + ")";
+	private static final String GET_POINTS_SURROUNDING_SQL = "SELECT gp.id, gp.lat, gp.lon, gpccp.coastline_point_id, gpccp.distance_in_miles FROM grid_point gp JOIN grid_point_client_coastline_point gpccp ON gp.id=gpccp.grid_point_id JOIN coastline_point cp ON gpccp.coastline_point_id=cp.id JOIN kbs_client kc ON kc.id=? WHERE gpccp.client_id=COALESCE(kc.coastline_client_id, 1) AND cp.client_id=COALESCE(kc.coastline_client_id, 1) AND gp.lat BETWEEN (? - " + BOUNDING_BOX_OFFSET + ") AND (? + " + BOUNDING_BOX_OFFSET + ") AND gp.lon BETWEEN (? - " + BOUNDING_BOX_OFFSET + ") AND (? + " + BOUNDING_BOX_OFFSET + ")";
 //	private static final String GET_COASTLINE_POINT_SORT_ORDERS_SURROUNDING_SQL = "SELECT MIN(cp.sort_order) AS min_sort_order, MAX(cp.sort_order) AS max_sort_order FROM grid_point gp JOIN grid_point_client_coastline_point gpccp ON gp.id=gpccp.grid_point_id JOIN coastline_point cp ON gpccp.coastline_point_id=cp.id AND gpccp.client_id=cp.client_id WHERE gpccp.client_id=? AND gp.lat BETWEEN (? - " + BOUNDING_BOX_OFFSET_LAT + ") AND (? + " + BOUNDING_BOX_OFFSET_LAT + ") AND gp.lon BETWEEN (? - " + BOUNDING_BOX_OFFSET_LON + ") AND (? + " + BOUNDING_BOX_OFFSET_LON + ")";
-	private static final String GET_COASTLINE_POINT_SORT_ORDERS_SURROUNDING_SQL = "SELECT MIN(cp.sort_order) AS min_sort_order, MAX(cp.sort_order) AS max_sort_order FROM grid_point gp JOIN grid_point_client_coastline_point gpccp ON gp.id=gpccp.grid_point_id JOIN coastline_point cp ON gpccp.coastline_point_id=cp.id AND gpccp.client_id=cp.client_id WHERE gpccp.client_id=? AND gp.lat BETWEEN (? - " + BOUNDING_BOX_OFFSET + ") AND (? + " + BOUNDING_BOX_OFFSET + ") AND gp.lon BETWEEN (? - " + BOUNDING_BOX_OFFSET + ") AND (? + " + BOUNDING_BOX_OFFSET + ")";
+	private static final String GET_COASTLINE_POINT_SORT_ORDERS_SURROUNDING_SQL = "SELECT MIN(cp.sort_order) AS min_sort_order, MAX(cp.sort_order) AS max_sort_order FROM grid_point gp JOIN grid_point_client_coastline_point gpccp ON gp.id=gpccp.grid_point_id JOIN coastline_point cp ON gpccp.coastline_point_id=cp.id AND gpccp.client_id=cp.client_id JOIN kbs_client kc ON kc.id=? WHERE gpccp.client_id=COALESCE(kc.coastline_client_id, 1) AND gp.lat BETWEEN (? - " + BOUNDING_BOX_OFFSET + ") AND (? + " + BOUNDING_BOX_OFFSET + ") AND gp.lon BETWEEN (? - " + BOUNDING_BOX_OFFSET + ") AND (? + " + BOUNDING_BOX_OFFSET + ")";
 	private static final String GET_POINTS_WEST_OF_LAT_SQL = "SELECT * FROM grid_point WHERE lat =< ?";
 	private static final String GET_POINTS_EAST_OF_LAT_SQL = "SELECT * FROM grid_point WHERE lat >= ?";
 	private static final String GET_POINTS_NORTH_OF_LON_SQL = "SELECT * FROM grid_point WHERE lon >= ?";
@@ -55,35 +56,38 @@ public class GridPointDaoImpl extends AbstractDao<GridPoint> implements GridPoin
 	@Autowired
 	private GridPointClientCoastlinePointDao gridPointClientCoastlinePointDao;
 	
+	private JdbcTemplate jdbcTemplate;
+	
 	public GridPointDaoImpl() {
 		super.INSERT_SQL = INSERT_SQL;
 		super.UPDATE_SQL = UPDATE_SQL;
 	}
 	
+	@PostConstruct
+	public void init() {
+		jdbcTemplate = new JdbcTemplate(datasource);
+	}
+	
 	@Override
 	public GridPoint get(Integer id) {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
 		GridPoint point = jdbcTemplate.queryForObject(SELECT_BY_ID_SQL, new Object[]{ id }, new GridPointRowMapper());
 		return point;
 	}
 	
 	@Override
 	public List<GridPoint> getPointsBetween(Integer clientId, Long startId, Long endId) {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
 		List<GridPoint> gridPoints = jdbcTemplate.query(GET_BETWEEN_SQL, new Object[]{ clientId, startId, endId }, new ClientGridPointRowMapper());
 		return gridPoints;
 	}
 	
 	@Override
 	public List<GridPoint> getOffset(Long startRow, Long endRow) {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
 		List<GridPoint> gridPoints = jdbcTemplate.query(GET_OFFSET_SQL, new Object[]{ startRow, endRow}, new GridPointRowMapper());
 		return gridPoints;
 	}
 	
 	@Override
 	public List<GridPoint> getAll() {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
 		List<GridPoint> gridPoints = jdbcTemplate.query(GET_ALL_SQL, new GridPointRowMapper());
 		return gridPoints;
 	}
@@ -108,35 +112,18 @@ public class GridPointDaoImpl extends AbstractDao<GridPoint> implements GridPoin
 			break;
 		}
 		
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
 		List<GridPoint> gridPoints = jdbcTemplate.query(sql, new Number[]{ param }, new ClientGridPointRowMapper());
 		return gridPoints;
 	}
 	
 	@Override
 	public List<GridPoint> getPointsSurrounding(Integer clientId, LatLng coordinate) {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
-		////// TODO DIRTY HACK
-		// We don't have a way to quickly determine if the current client has custom coastline points. The query needs to be rewritten to check for custom coastline points
-		// and fall back to client ID 1's coastline (the default) if not. There's no time to do that right now.
-		if(clientId != 2) { // CIC
-			clientId = 1;
-		}
-			
-		List<GridPoint> gridPoints = jdbcTemplate.query(GET_POINTS_SURROUNDING_SQL, new Number[]{ clientId, clientId, coordinate.getLat(), coordinate.getLat(), coordinate.getLng(), coordinate.getLng() }, new ClientGridPointRowMapper());
+		List<GridPoint> gridPoints = jdbcTemplate.query(GET_POINTS_SURROUNDING_SQL, new Number[]{ clientId, coordinate.getLat(), coordinate.getLat(), coordinate.getLng(), coordinate.getLng() }, new ClientGridPointRowMapper());
 		return gridPoints;
 	}
 	
 	@Override
 	public MinMaxCoastlinePointSortOrder getBoundingCoastlinePointSortOrders(Integer clientId, LatLng coordinate) {
-		////// TODO DIRTY HACK
-		// We don't have a way to quickly determine if the current client has custom coastline points. The query needs to be rewritten to check for custom coastline points
-		// and fall back to client ID 1's coastline (the default) if not. There's no time to do that right now.
-		if(clientId != 2) { // CIC
-			clientId = 1;
-		}
-		
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
 		MinMaxCoastlinePointSortOrder boundingSortOrders = jdbcTemplate.queryForObject(GET_COASTLINE_POINT_SORT_ORDERS_SURROUNDING_SQL, new Number[]{ clientId, coordinate.getLat(), coordinate.getLat(), coordinate.getLng(), coordinate.getLng() }, new MinMaxCoastlinePointSortOrderRowMapper());
 		return boundingSortOrders;
 	}
@@ -151,7 +138,6 @@ public class GridPointDaoImpl extends AbstractDao<GridPoint> implements GridPoin
 			gridPointClientRelations.add(new GridPointClientCoastlinePoint(point.getClientId(), point.getId(), point.getClosestCoastlinePointId(), point.getDistanceInMiles()));
 		}
 		
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
 		jdbcTemplate.batchUpdate(INSERT_SQL, params);
 		
 		gridPointClientCoastlinePointDao.save(gridPointClientRelations);
@@ -170,7 +156,6 @@ public class GridPointDaoImpl extends AbstractDao<GridPoint> implements GridPoin
 			gridPointClientRelations.add(new GridPointClientCoastlinePoint(point.getClientId(), point.getId(), point.getClosestCoastlinePointId(), point.getDistanceInMiles()));
 		}
 		
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
 		jdbcTemplate.batchUpdate(UPDATE_SQL, params);
 		
 		gridPointClientCoastlinePointDao.save(gridPointClientRelations);
@@ -195,7 +180,6 @@ public class GridPointDaoImpl extends AbstractDao<GridPoint> implements GridPoin
 	
 	protected Integer create(GridPoint point) {
 		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
 		jdbcTemplate.update(getInsertStatementFactory().newPreparedStatementCreator(new Object[] { 
 				point.getLat(), 
 				point.getLng()
@@ -206,7 +190,6 @@ public class GridPointDaoImpl extends AbstractDao<GridPoint> implements GridPoin
 	}
 	
 	protected Integer update(GridPoint point) {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
 		jdbcTemplate.update(getUpdateStatementFactory().newPreparedStatementCreator(new Object[] { 
 				point.getLat(), 
 				point.getLng(), 

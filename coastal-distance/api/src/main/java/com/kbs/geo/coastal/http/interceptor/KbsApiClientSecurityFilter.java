@@ -62,7 +62,7 @@ public class KbsApiClientSecurityFilter extends GenericFilterBean {
 			
 			// Throws an exception if the request is not authenticated
 			ClientAuth clientAuth = apiSecurityService.authenticateRequest(authToken, httpServletRequest, httpServletResponse);
-			// Make this authentication information to downstream classes
+			// Make this authentication information available to downstream classes
 			kbContext.setClientAuth(clientAuth);
 			
 			// Log request and response
@@ -93,7 +93,7 @@ public class KbsApiClientSecurityFilter extends GenericFilterBean {
 //				clientRequest.setResponseBody(bufferedResponse.getBody());
 				clientRequest.setResponseBody(responseOutputStream.toString("utf-8"));
 				clientRequest.setResponseStatus(bufferedResponse.getStatus());
-				Integer clientRequestId = clientRequestService.save(clientRequest);
+				clientRequestService.save(clientRequest);
 			} catch(KbsRestException e) {
 				LOG.error("Request failed!", e);
 				clientRequest.setError(Boolean.TRUE);
@@ -140,8 +140,14 @@ public class KbsApiClientSecurityFilter extends GenericFilterBean {
 		requestError.setRequestBody(requestBody);
 		requestError.setRequestTime(new Date());
 		
-		// TODO When there are multiple request types available, this should be based on the request type matching the requested endpoint
-		requestError.setRequestType(RequestType.DISTANCE_TO_COAST);
+		// When there are multiple request types available, this should be based on the request type matching the requested endpoint
+		String path = request.getPathInfo();
+		if(path.contains("coastal-distance")) {
+			requestError.setRequestType(RequestType.DISTANCE_TO_COAST);
+		} else if(path.contains("fire-station")) {
+			requestError.setRequestType(RequestType.FIRE_STATION);
+		}
+		
 		requestError.setRequestUrl(request.getRequestURI());
 		return requestError;
 	}

@@ -135,6 +135,12 @@ public class GridPointClientCoastlinePointDaoImpl implements GridPointClientCoas
 	
 	@Override
 	public GridPointClientCoastlinePoint get(Integer clientId, Integer gridPointId) {
+		////// TODO DIRTY HACK
+		// We don't have a way to quickly determine if the current client has custom coastline points. The query needs to be rewritten to check for custom coastline points
+		// and fall back to client ID 1's coastline (the default) if not. There's no time to do that right now.
+		if(clientId != 2) { // CIC
+			clientId = 1;
+		}
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(datasource);
 		GridPointClientCoastlinePoint point = jdbcTemplate.queryForObject(SELECT_BY_IDS_SQL, new Object[]{ clientId, gridPointId }, new GridPointClientCoastlinePointRowMapper());
 		return point;
