@@ -1,6 +1,7 @@
 package com.kbs.geo.coastal.client.impl;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import com.kbs.geo.coastal.client.KbGeoClient;
 import com.kbs.geo.coastal.client.exception.InvalidUrlParameterException;
@@ -18,7 +19,7 @@ import com.kbs.geo.coastal.client.model.LatLng;
  *
  */
 public class KbGeoClientImpl extends AbstractHttpClient implements KbGeoClient {
-	private static final String DTC_BY_COORDS_SUFFIX = "/coord?lat=%s&lon=%s";
+	private static final String DTC_BY_COORDS_SUFFIX = "/coord?lat=%s&lng=%s";
 	private static final String DTC_BY_ADDRESS_SUFFIX = "/address?address=%s";
 	public static KbGeoClientImpl createClient(String apiKey) {
 		return new KbGeoClientImpl(apiKey);
@@ -37,7 +38,7 @@ public class KbGeoClientImpl extends AbstractHttpClient implements KbGeoClient {
 	 * @throws IOException
 	 */
 	public DtcResult getDistanceToCoast(LatLng latLng) throws NoApiKeySetException, InvalidUrlParameterException, IOException {
-		String suffix = String.format(DTC_BY_COORDS_SUFFIX, latLng.getLat().toPlainString());
+		String suffix = String.format(DTC_BY_COORDS_SUFFIX, latLng.getLat(), latLng.getLng());
 		return getResult(suffix, DtcResult.class);
 	}
 	
@@ -51,7 +52,7 @@ public class KbGeoClientImpl extends AbstractHttpClient implements KbGeoClient {
 	 * @throws IOException
 	 */
 	public DtcResult getDistanceToCoast(String address) throws NoApiKeySetException, InvalidUrlParameterException, IOException {
-		String suffix = String.format(DTC_BY_ADDRESS_SUFFIX, address);
+		String suffix = String.format(DTC_BY_ADDRESS_SUFFIX, URLEncoder.encode(address, "UTF-8"));
 		return getResult(suffix, DtcResult.class);
 	}
 }

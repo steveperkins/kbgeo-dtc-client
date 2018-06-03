@@ -1,19 +1,17 @@
 package com.kbs.geo.coastal.client.model;
 
-import java.math.BigDecimal;
-
 /**
  * The result of a Distance to Coast request
  * @author http://www.kbgeo.com
  *
  */
 public class DtcResult {
-	private BigDecimal distanceInMiles;
+	private double distanceInMiles;
 	private LatLng targetPoint;
 	private LatLng coastlinePoint;
 	
 	public DtcResult() {}
-	public DtcResult(BigDecimal distanceInMiles, LatLng targetPoint, LatLng coastlinePoint) {
+	public DtcResult(double distanceInMiles, LatLng targetPoint, LatLng coastlinePoint) {
 		this.distanceInMiles = distanceInMiles;
 		this.targetPoint = targetPoint;
 		this.coastlinePoint = coastlinePoint;
@@ -21,10 +19,10 @@ public class DtcResult {
 	/**
 	 * @return distance, in miles, between the target (inland) point and the nearest point on the coast (coastline point)
 	 */
-	public BigDecimal getDistanceInMiles() {
+	public double getDistanceInMiles() {
 		return distanceInMiles;
 	}
-	public void setDistanceInMiles(BigDecimal distanceInMiles) {
+	public void setDistanceInMiles(double distanceInMiles) {
 		this.distanceInMiles = distanceInMiles;
 	}
 	/**

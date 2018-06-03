@@ -1,31 +1,29 @@
 package com.kbs.geo.coastal.client.model;
 
-import java.math.BigDecimal;
-
 /**
  * A latitude/longitude pair representing a given point on Earth
  * @author http://www.kbgeo.com
  *
  */
 public class LatLng {
-	private BigDecimal lat;
-	private BigDecimal lng;
+	private double lat;
+	private double lng;
 	
 	public LatLng() {}
-	public LatLng(BigDecimal lat, BigDecimal lng) {
+	public LatLng(double lat, double lng) {
 		this.lat = lat;
 		this.lng = lng;
 	}
-	public BigDecimal getLat() {
+	public double getLat() {
 		return lat;
 	}
-	public void setLat(BigDecimal lat) {
+	public void setLat(Double lat) {
 		this.lat = lat;
 	}
-	public BigDecimal getLng() {
+	public double getLng() {
 		return lng;
 	}
-	public void setLng(BigDecimal lng) {
+	public void setLng(Double lng) {
 		this.lng = lng;
 	}
 }
